@@ -1,28 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { Role } from 'src/entities/user.entity';
 
 export class ViewUserDto {
   @ApiProperty()
-	id: number;
+  id: number;
 
   @ApiProperty()
-	firstName: string;
+  firstName: string;
 
   @ApiProperty()
-	lastName: string;
+  lastName: string;
 
   @ApiProperty()
-	email: string;
+  email: string;
 
   @ApiProperty()
-	role: Role;
+  role: Role;
 
   @ApiProperty()
-	createdAt: Date;
+  createdAt: Date;
+  @ApiProperty({})
+  updatedAt: Date;
 
   @ApiProperty()
-	updatedAt: Date;
-
-  @ApiProperty()
-	deletedAt: Date;
+  deletedAt: Date;
 }

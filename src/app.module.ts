@@ -8,17 +8,17 @@ import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			envFilePath: '.env',
-			ignoreEnvFile: false,
-			isGlobal: true,
-			load: [configuration],
-		}),
-		UsersModule,
-		AuthModule,
-	],
-	controllers: [AppController],
-	providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      ignoreEnvFile: false,
+      isGlobal: true,
+      load: [configuration],
+    }),
+    UsersModule,
+    AuthModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

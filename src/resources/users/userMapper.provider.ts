@@ -4,23 +4,23 @@ import { ViewUserDto } from './dto/view-user.dto';
 
 @Injectable()
 export class UserHelperProvider {
-	userListToViewDto(users: User[]): ViewUserDto[] {
-		const viewUserListDto = users.map((user) => this.userToViewDto(user));
+  userListToViewDto(users: User[]): ViewUserDto[] {
+    const viewUserListDto = users.map((user) => this.userToViewDto(user));
 
-		return viewUserListDto;
-	}
+    return viewUserListDto;
+  }
 
-	userToViewDto(user: User): ViewUserDto {
-		const viewUserDto = new ViewUserDto();
+  userToViewDto(user: User): ViewUserDto {
+    const viewUserDto = new ViewUserDto();
 
-		viewUserDto.id = user.id;
-		viewUserDto.firstName = user.firstName;
-		viewUserDto.lastName = user.lastName;
-		viewUserDto.email = user.email;
-		viewUserDto.role = user.role;
-		viewUserDto.createdAt = user.createdAt;
-		viewUserDto.updatedAt = user.updatedAt;
+    viewUserDto.id = user.id;
+    viewUserDto.firstName = user.firstName;
+    viewUserDto.lastName = user.lastName;
+    viewUserDto.email = user.email;
+    viewUserDto.role = user.role;
+    viewUserDto.createdAt = user.createdAt;
+    viewUserDto.updatedAt = user.updatedAt;
 
-		return viewUserDto;
-	}
+    return viewUserDto;
+  }
 }

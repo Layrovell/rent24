@@ -8,9 +8,9 @@ import { SecurityModule } from 'src/security/security.module';
 import { UserHelperProvider } from './userMapper.provider';
 
 @Module({
-	imports: [DatabaseModule, forwardRef(() => AuthModule), SecurityModule],
-	controllers: [UsersController],
-	providers: [UsersService, UserHelperProvider],
-	exports: [UsersService, UserHelperProvider],
+  imports: [DatabaseModule, forwardRef(() => AuthModule), SecurityModule],
+  controllers: [UsersController],
+  providers: [UsersService, UserHelperProvider],
+  exports: [UsersService, UserHelperProvider],
 })
 export class UsersModule {}

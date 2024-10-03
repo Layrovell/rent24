@@ -4,14 +4,14 @@ import { Role } from 'src/entities/user.entity';
 
 export class CreateUserDto {
   @ApiProperty()
-	firstName: string;
+  firstName: string;
 
   @ApiProperty()
-	lastName: string;
+  lastName: string;
 
   @ApiProperty()
-	email: string;
+  email: string;
 
   @ApiProperty()
-	role: Role;
+  role: Role;
 }

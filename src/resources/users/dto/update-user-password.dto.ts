@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
-import { IsNotEqual } from "src/common/validators/is-not-equal.validator";
+import { IsNotEqual } from 'src/common/validators/is-not-equal.validator';
 
 export class UpdateUserPasswordDto {
   @ApiProperty()

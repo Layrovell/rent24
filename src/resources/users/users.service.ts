@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { User } from 'src/entities';
@@ -11,7 +16,7 @@ export class UsersService {
   constructor(
     @Inject(User)
     private userRepository: Repository<User>,
-    private readonly securityService: SecurityService,
+    private readonly securityService: SecurityService
   ) {}
 
   async getUserById(id: number): Promise<User> {
@@ -52,13 +57,16 @@ export class UsersService {
     return users;
   }
 
-  async updatePassword(id: number, dto: UpdateUserPasswordDto): Promise<boolean> {
+  async updatePassword(
+    id: number,
+    dto: UpdateUserPasswordDto
+  ): Promise<boolean> {
     const existingUser = await this.getUserById(id);
 
     const isValidPassword = await this.securityService.compareData(
       dto.oldPassword,
       existingUser.hashedPassword
-    )
+    );
 
     if (!isValidPassword) {
       throw new BadRequestException('Wrong old password');
@@ -69,7 +77,7 @@ export class UsersService {
     const updatedUser = await this.userRepository.save({
       ...existingUser,
       hashedPassword: newHashedPassword,
-    })
+    });
 
     return !!updatedUser;
   }

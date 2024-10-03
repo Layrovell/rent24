@@ -38,7 +38,7 @@ export class UsersController {
   // SameUserGuard: checks if id param same as id from the token
   updatePassword(
     @Param('id') id: number,
-    @Body() dto: UpdateUserPasswordDto,
+    @Body() dto: UpdateUserPasswordDto
   ): Promise<boolean> {
     return this.userService.updatePassword(id, dto);
   }

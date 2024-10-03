@@ -10,19 +10,19 @@ import { SecurityModule } from 'src/security/security.module';
 import { JwtStrategy } from 'src/strategies/jwtStrategy';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot(),
-		forwardRef(() => UsersModule),
-		SecurityModule,
-		PassportModule,
-		JwtModule.register({
-			secret: process.env.SECRET,
-			signOptions: { expiresIn: '2h' },
-		}),
-	],
-	// JWT strategy extracts and attaches the user to the req
-	providers: [AuthService, JwtStrategy],
-	controllers: [AuthController],
-	exports: [AuthService],
+  imports: [
+    ConfigModule.forRoot(),
+    forwardRef(() => UsersModule),
+    SecurityModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.SECRET,
+      signOptions: { expiresIn: '2h' },
+    }),
+  ],
+  // JWT strategy extracts and attaches the user to the req
+  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}
