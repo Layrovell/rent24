@@ -18,7 +18,7 @@ export class UserHelperProvider {
 		viewUserDto.lastName = user.lastName;
 		viewUserDto.email = user.email;
 		viewUserDto.role = user.role;
-		viewUserDto.createdat = user.createdAt;
+		viewUserDto.createdAt = user.createdAt;
 		viewUserDto.updatedAt = user.updatedAt;
 
 		return viewUserDto;
