@@ -13,12 +13,15 @@ import { SecurityService } from 'src/security/security.service';
 import { User } from 'src/entities/user.entity';
 import { LoginDto, LoginResponseDto, RegisterDto } from './dto/auth.dto';
 import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
+import { ActivityLogService } from 'src/resources/activity-log/activity-log.service';
+import { ActivityType } from 'src/entities/activity-log.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly securityService: SecurityService,
+    private readonly activityLogService: ActivityLogService,
     private readonly config: ConfigService,
     @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
@@ -81,6 +84,12 @@ export class AuthService {
     };
 
     const newUser = await this.userService.createUser(data);
+
+    await this.activityLogService.createActivityLog(
+      newUser,
+      ActivityType.REGISTRATION,
+      'The user was created'
+    );
 
     const tokens = await this.generateTokenPair(newUser);
 

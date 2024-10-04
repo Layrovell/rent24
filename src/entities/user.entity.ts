@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
+import { ActivityLog } from './activity-log.entity';
 // import { Profile } from './profile.entity';
 
 export enum Role {
@@ -67,6 +69,9 @@ export class User {
 
   // @OneToOne((type) => Profile, profile => profile.user)
   // profile: Profile;
+
+  @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
+  activityLogs: ActivityLog[];
 }
 
 // @DeleteDateColumn is a special column that is automatically set

@@ -10,12 +10,15 @@ import { User } from 'src/entities';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ActivityLogService } from '../activity-log/activity-log.service';
+import { ActivityType } from 'src/entities/activity-log.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(User)
     private userRepository: Repository<User>,
+    private readonly activityLogService: ActivityLogService, // Inject the activity log service
     private readonly securityService: SecurityService
   ) {}
 
@@ -78,6 +81,12 @@ export class UsersService {
       ...existingUser,
       hashedPassword: newHashedPassword,
     });
+
+    await this.activityLogService.createActivityLog(
+      updatedUser,
+      ActivityType.PASSWORD_CHANGE,
+      'The password was changed'
+    );
 
     return !!updatedUser;
   }

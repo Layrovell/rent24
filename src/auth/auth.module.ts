@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/resources/users/users.module';
 import { SecurityModule } from 'src/security/security.module';
 import { JwtStrategy } from 'src/strategies/jwtStrategy';
+import { ActivityLogModule } from 'src/resources/activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtStrategy } from 'src/strategies/jwtStrategy';
       secret: process.env.SECRET,
       signOptions: { expiresIn: '2h' },
     }),
+    ActivityLogModule,
   ],
   // JWT strategy extracts and attaches the user to the req
   providers: [AuthService, JwtStrategy],

@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './resources/users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ActivityLogModule } from './resources/activity-log/activity-log.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -17,6 +18,7 @@ import configuration from './config/configuration';
     }),
     UsersModule,
     AuthModule,
+    ActivityLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

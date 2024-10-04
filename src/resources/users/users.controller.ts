@@ -8,13 +8,16 @@ import { SameUserGuard } from 'src/guards/same-user.guard';
 
 import { ViewUserDto } from './dto/view-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
+import { ActivityLogService } from '../activity-log/activity-log.service';
+import { ActivityLog } from 'src/entities';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly userService: UsersService,
-    private readonly userHelperProvider: UserHelperProvider
+    private readonly userHelperProvider: UserHelperProvider,
+    private readonly activityLogService: ActivityLogService
   ) {}
 
   @Get('')
@@ -31,6 +34,12 @@ export class UsersController {
     const user = await this.userService.getUserById(id);
 
     return this.userHelperProvider.userToViewDto(user);
+  }
+
+  @Get(':id/activity-logs')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async getActivityLogs(@Param('id') userId: number): Promise<ActivityLog[]> {
+    return await this.activityLogService.getActivityLogsByUserId(userId);
   }
 
   @Patch(':id/password')
