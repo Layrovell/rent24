@@ -3,8 +3,9 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { User } from 'src/entities';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
@@ -12,6 +13,7 @@ import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ActivityType } from 'src/entities/activity-log.entity';
+import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class UsersService {
@@ -19,14 +21,15 @@ export class UsersService {
     @Inject(User)
     private userRepository: Repository<User>,
     private readonly activityLogService: ActivityLogService, // Inject the activity log service
-    private readonly securityService: SecurityService
+    private readonly securityService: SecurityService,
+    private readonly profileService: ProfileService
   ) {}
 
-  async getUserById(id: number): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id });
+  async getUserById(userId: number): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) {
-      throw new NotFoundException(`User with the ID ${id} not found`);
+      throw new NotFoundException(`User with the ID ${userId} not found`);
     }
 
     return user;
@@ -47,7 +50,30 @@ export class UsersService {
       throw new BadRequestException(`Email ${dto.email} is already in use`);
     }
 
-    return await this.userRepository.save(dto);
+    // Start a transaction
+    return await this.userRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        try {
+          // Create the user first
+          const createdUser = entityManager.create(User, dto);
+          const savedUser = await entityManager.save(createdUser);
+
+          // Create the blank profile
+          const profile =
+            await this.profileService.createBlankProfile(savedUser);
+
+          savedUser.profile = profile;
+
+          // Save the user again to establish the relationship
+          return await entityManager.save(savedUser);
+        } catch (error) {
+          console.error('transaction error:', error);
+          throw new InternalServerErrorException(
+            'Unable to register user. Please try again later'
+          );
+        }
+      }
+    );
   }
 
   async getAllUsers() {

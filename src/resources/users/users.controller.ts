@@ -10,6 +10,9 @@ import { ViewUserDto } from './dto/view-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ActivityLog } from 'src/entities';
+import { ProfileService } from '../profile/profile.service';
+import { ViewUserProfileDto } from '../profile/dto/view-profile.dto';
+import { UpdateUserProfileDto } from '../profile/dto/update-profile.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -17,7 +20,8 @@ export class UsersController {
   constructor(
     private readonly userService: UsersService,
     private readonly userHelperProvider: UserHelperProvider,
-    private readonly activityLogService: ActivityLogService
+    private readonly activityLogService: ActivityLogService,
+    private readonly profileService: ProfileService
   ) {}
 
   @Get('')
@@ -30,10 +34,20 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async getUserById(@Param('id') id: number): Promise<ViewUserDto> {
-    const user = await this.userService.getUserById(id);
+  async getUserById(@Param('id') userId: number): Promise<ViewUserDto> {
+    const user = await this.userService.getUserById(userId);
 
     return this.userHelperProvider.userToViewDto(user);
+  }
+
+  @Get(':id/profile')
+  @UseGuards(JwtAuthGuard)
+  async getUserProfile(
+    @Param('id') userId: number
+  ): Promise<ViewUserProfileDto> {
+    const user = await this.userService.getUserById(userId);
+
+    return await this.profileService.getUserProfileById(user);
   }
 
   @Get(':id/activity-logs')
@@ -50,5 +64,16 @@ export class UsersController {
     @Body() dto: UpdateUserPasswordDto
   ): Promise<boolean> {
     return this.userService.updatePassword(id, dto);
+  }
+
+  @Patch(':id/profile')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async updateUserProfile(
+    @Param('id') userId: number,
+    @Body() dto: UpdateUserProfileDto
+  ): Promise<any> {
+    const user = await this.userService.getUserById(userId);
+
+    return await this.profileService.updateUserProfile(user, dto);
   }
 }

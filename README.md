@@ -58,6 +58,32 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## Role Definitions
+
+#### Guest:
+Unregistered users who can view listings but cannot take any actions like saving properties or renting them. They must register to become a User or an Agent.
+
+#### User (default role, can act like an Owner):
+A registered user who can perform actions such as renting properties, saving properties, and posting their own properties as an owner.
+This role covers the functionality of a typical user and owner combined.
+Users can list properties they own (acting as an owner) but cannot act as an agent for other owners.
+
+#### Agent:
+An Agent can act on behalf of multiple property owners, post listings, and manage properties for others.
+Agents may have fields like commissionRate and companyName that apply specifically to their agency work.
+They have distinct responsibilities from regular users because they deal with third-party property management.
+If the Agent wants to post their own property (acting as an Owner), they should be able to do so while maintaining their ability to post properties on behalf of others.
+
+
+## Entities:
+**User** - During registration, only the essential fields (like email, password, and role) are saved to the User entity.
+**Profile** - The Profile entity is created later when the user interacts with the app further (like accessing the settings page), where they can complete additional information.
+
+
+## Techniqs
+1. Modular Design (separated Profile from User entity);
+1. Dedicated Profile Module insread on adding all related logic into User (Separation of Concerns);
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:
@@ -70,16 +96,3 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

@@ -7,6 +7,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { SecurityModule } from 'src/security/security.module';
 import { ActivityLogModule } from '../activity-log/activity-log.module';
 import { UserHelperProvider } from './userMapper.provider';
+import { ProfileModule } from '../profile/profile.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserHelperProvider } from './userMapper.provider';
     forwardRef(() => AuthModule),
     SecurityModule,
     ActivityLogModule,
+    ProfileModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UserHelperProvider],
