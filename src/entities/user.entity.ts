@@ -6,16 +6,17 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 import { ActivityLog } from './activity-log.entity';
-// import { Profile } from './profile.entity';
+import { Profile } from './profile.entity';
 
 export enum Role {
   GUEST = 'guest',
   USER = 'user',
-  OWNER = 'owner',
   AGENT = 'agent',
 }
 
@@ -67,8 +68,12 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastSignIn: Date;
 
-  // @OneToOne((type) => Profile, profile => profile.user)
-  // profile: Profile;
+  @OneToOne(() => Profile, (profile) => profile.user, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  profile: Profile; // Each user has one profile created at registration
+
+  @Column()
+  profileId: number;
 
   @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
   activityLogs: ActivityLog[];

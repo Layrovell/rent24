@@ -14,7 +14,9 @@ export class SameUserGuard implements CanActivate {
 
     if (userIdFromToken !== +paramId) {
       // If token user 'id' doesn't match the request user 'id', throw an error
-      throw new ForbiddenException('You can only change your own password');
+      throw new ForbiddenException(
+        'You can only view or change your own personal data'
+      );
     }
 
     return true; // Allow the request if IDs match

@@ -14,7 +14,7 @@ export enum ActivityType {
   LOGIN = 'login', // can be moved to a separte(security) log
   LOGOUT = 'logout', // can be moved to a separte(security) log
   PASSWORD_CHANGE = 'password_change',
-  // PROFILE_UPDATE = 'profile_update',
+  PROFILE_UPDATE = 'profile_update',
   EMAIL_UPDATE = 'email_update',
   PHONE_UPDATE = 'phone_update',
   ACCOUNT_DEACTIVATION = 'account_deactivation',

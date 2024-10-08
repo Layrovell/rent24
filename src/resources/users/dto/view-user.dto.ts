@@ -25,4 +25,7 @@ export class ViewUserDto {
 
   @ApiProperty()
   deletedAt: Date;
+
+  @ApiProperty()
+  profileId: number;
 }
