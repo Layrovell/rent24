@@ -47,7 +47,7 @@ export class UsersController {
   ): Promise<ViewUserProfileDto> {
     const user = await this.userService.getUserById(userId);
 
-    return await this.profileService.getUserProfileById(user);
+    return await this.profileService.getProfileByUser(user);
   }
 
   @Get(':id/activity-logs')
@@ -74,6 +74,6 @@ export class UsersController {
   ): Promise<any> {
     const user = await this.userService.getUserById(userId);
 
-    return await this.profileService.updateUserProfile(user, dto);
+    return await this.profileService.updateProfileByUser(user, dto);
   }
 }

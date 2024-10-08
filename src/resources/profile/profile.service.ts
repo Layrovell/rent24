@@ -43,11 +43,11 @@ export class ProfileService {
     return existingUserProfile;
   }
 
-  async updateUserProfile(user: User, dto: UpdateUserProfileDto) {
+  async updateProfileByUser(user: User, dto: UpdateUserProfileDto) {
     // TODO: Is it good for getting the Profile pass the user instead of injecting userService?
     const existingUserProfile = await this.getProfileByUser(user);
 
-    if (!existingUserProfile.description && dto.description) {
+    if (dto.description) {
       await this.activityLogService.createActivityLog(
         user,
         ActivityType.PROFILE_UPDATE,
