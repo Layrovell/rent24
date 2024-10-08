@@ -40,16 +40,10 @@ export class User {
   @IsNotEmpty()
   email: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   phone: string;
 
-  @Column({
-    type: 'enum',
-    enum: Role,
-    default: Role.USER,
-  })
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: Role;
 
   @Column()
@@ -72,10 +66,10 @@ export class User {
   @JoinColumn()
   profile: Profile; // Each user has one profile created at registration
 
-  @Column()
+  @Column({ nullable: true })
   profileId: number;
 
-  @OneToMany(() => ActivityLog, (activityLog) => activityLog.user)
+  @OneToMany(() => ActivityLog, (log) => log.user, { onDelete: 'CASCADE' })
   activityLogs: ActivityLog[];
 }
 

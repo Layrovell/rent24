@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -67,6 +68,7 @@ export class ActivityLog {
   @CreateDateColumn()
   timestamp: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.activityLogs, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' }) // The foreign key column
   user: User;
 }

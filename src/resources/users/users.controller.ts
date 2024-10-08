@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UserHelperProvider } from './userMapper.provider';
@@ -66,6 +75,12 @@ export class UsersController {
     return this.userService.updatePassword(id, dto);
   }
 
+  @Put('recovery/:id')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async recoverUser(@Param('id') userId: number): Promise<ViewUserDto> {
+    return await this.userService.recoverUser(userId);
+  }
+
   @Patch(':id/profile')
   @UseGuards(JwtAuthGuard, SameUserGuard)
   async updateUserProfile(
@@ -75,5 +90,15 @@ export class UsersController {
     const user = await this.userService.getUserById(userId);
 
     return await this.profileService.updateProfileByUser(user, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async deleteUserAndAllRelated(
+    @Param('id') userId: number
+  ): Promise<{ message: string }> {
+    await this.userService.softDeleteUser(userId);
+
+    return { message: `User with ID ${userId} has been soft-deleted` }; // Return success message
   }
 }

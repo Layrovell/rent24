@@ -5,7 +5,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 
 import { User } from 'src/entities';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ActivityType } from 'src/entities/activity-log.entity';
 import { ProfileService } from '../profile/profile.service';
+import { ViewUserDto } from './dto/view-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -115,5 +116,36 @@ export class UsersService {
     );
 
     return !!updatedUser;
+  }
+
+  async softDeleteUser(userId: number): Promise<void> {
+    const existingUser = await this.getUserById(userId);
+
+    await this.userRepository.softRemove(existingUser);
+    console.log(`SOFT deletion successful for user ID: ${userId}`);
+  }
+
+  async recoverUser(userId: number): Promise<ViewUserDto> {
+    const existingUser = await this.userRepository.findOne({
+      where: {
+        id: userId,
+        deletedAt: Not(IsNull()), // not work
+      },
+      withDeleted: true,
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException(
+        `Soft-deleted user with ID ${userId} not found`
+      );
+    }
+
+    // Set deletedAt back to null to recover the user
+    existingUser.deletedAt = null;
+
+    await this.userRepository.save(existingUser);
+    console.log(`User ID ${userId} successfully recovered`);
+
+    return existingUser; // Return the recovered user
   }
 }
