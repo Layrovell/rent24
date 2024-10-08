@@ -29,7 +29,7 @@ export class ProfileService {
     return await this.profileRepository.save(blankProfile);
   }
 
-  async getUserProfileById(user: User): Promise<ViewUserProfileDto> {
+  async getProfileByUser(user: User): Promise<ViewUserProfileDto> {
     const existingUserProfile = await this.profileRepository.findOneBy({
       id: user.profileId,
     });
@@ -44,15 +44,8 @@ export class ProfileService {
   }
 
   async updateUserProfile(user: User, dto: UpdateUserProfileDto) {
-    const existingUserProfile = await this.profileRepository.findOneBy({
-      id: user.profileId,
-    });
-
-    if (!existingUserProfile) {
-      throw new NotFoundException(
-        `Profile for user with the ID ${user.id} not found`
-      );
-    }
+    // TODO: Is it good for getting the Profile pass the user instead of injecting userService?
+    const existingUserProfile = await this.getProfileByUser(user);
 
     if (!existingUserProfile.description && dto.description) {
       await this.activityLogService.createActivityLog(
