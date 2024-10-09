@@ -17,7 +17,7 @@ export class TasksService {
   // @Cron('* * * * *') // Run every minute (for testing purposes)
   @Cron('0 0 * * *') // Runs daily at midnight
   async deleteExpiredUsers(): Promise<void> {
-    this.logger.debug('Run user delition job every minute');
+    this.logger.debug('Run user delition job');
 
     const gracePeriodDays = 3;
     const gracePeriodDate = new Date();

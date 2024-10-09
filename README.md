@@ -78,21 +78,17 @@ If the Agent wants to post their own property (acting as an Owner), they should 
 ## Entities:
 **User** - During registration, only the essential fields (like email, password, and role) are saved to the User entity.
 **Profile** - The Profile entity is created later when the user interacts with the app further (like accessing the settings page), where they can complete additional information.
+**ActivityLog** - The ActivityLog entity records all significant actions performed by the user in the app. It provides a history of user activities, which helps in monitoring, auditing, and providing transparency over what actions were taken within the system.
 
 
-## Techniqs
-1. Modular Design (separated Profile from User entity);
-1. Dedicated Profile Module insread on adding all related logic into User (Separation of Concerns);
+## Techniques
+1. Modular Design: separated Profile from User entity;
+1. Separation of Concerns: The profile logic is entirely separated from the user logic, making the codebase cleaner and more modular.
 
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- [NestJS Documentation](https://docs.nestjs.com);
+- [TypeORM Documentation](https://typeorm.io);
 
