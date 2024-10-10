@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { User } from './user.entity';
+import { Favorites } from './favorites.entity';
 
 export enum PropertyType {
   ROOM = 'room',
@@ -59,6 +61,9 @@ export class Property {
   })
   @JoinColumn({ name: 'userId' }) // The foreign key column
   user: User;
+
+  @OneToMany(() => Favorites, (favoriteProperty) => favoriteProperty.property)
+  favoritedBy: Favorites[];
 
   // @OneToOne(() => PropertyDetails, (details) => details.property, { cascade: true })
   // @JoinColumn()
