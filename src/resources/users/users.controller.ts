@@ -22,6 +22,7 @@ import { ActivityLog } from 'src/entities';
 import { ProfileService } from '../profile/profile.service';
 import { ViewUserProfileDto } from '../profile/dto/view-profile.dto';
 import { UpdateUserProfileDto } from '../profile/dto/update-profile.dto';
+import { Favorites } from 'src/entities/favorites.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -65,6 +66,12 @@ export class UsersController {
     return await this.activityLogService.getActivityLogsByUserId(userId);
   }
 
+  @Get(':id/favorites')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async getUserFavorites(@Param('id') userId: number): Promise<Favorites[]> {
+    return this.userService.getFavorites(userId);
+  }
+
   @Patch(':id/password')
   @UseGuards(JwtAuthGuard, SameUserGuard)
   // SameUserGuard: checks if id param same as id from the token
@@ -90,6 +97,15 @@ export class UsersController {
     const user = await this.userService.getUserById(userId);
 
     return await this.profileService.updateProfileByUser(user, dto);
+  }
+
+  @Patch(':id/favorites/:propertyId')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async toggleFavorite(
+    @Param('id') userId: number,
+    @Param('propertyId') propertyId: number
+  ): Promise<void> {
+    return this.userService.toggleFavorite(userId, propertyId);
   }
 
   @Delete(':id')

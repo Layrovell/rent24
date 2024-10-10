@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, Interval } from '@nestjs/schedule';
-import { Repository, LessThan } from 'typeorm';
+import { Repository, Not, IsNull } from 'typeorm';
 
 import { User } from 'src/entities';
 
@@ -14,8 +14,8 @@ export class TasksService {
   ) {}
 
   // Cron job that runs every day at midnight to delete users whose grace period has expired
-  // @Cron('* * * * *') // Run every minute (for testing purposes)
-  @Cron('0 0 * * *') // Runs daily at midnight
+  @Cron('* * * * *') // Run every minute (for testing purposes)
+  // @Cron('0 0 * * *') // Runs daily at midnight
   async deleteExpiredUsers(): Promise<void> {
     this.logger.debug('Run user delition job');
 
@@ -26,8 +26,8 @@ export class TasksService {
     // Users whose deletion date is older than the grace period
     const usersToDelete = await this.userRepository.find({
       where: {
-        // Not(IsNull()) - for testing purposes
-        deletedAt: LessThan(gracePeriodDate),
+        // LessThan(gracePeriodDate)
+        deletedAt: Not(IsNull()), // for testing purposes
       },
       withDeleted: true,
     });

@@ -13,6 +13,8 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 import { ActivityLog } from './activity-log.entity';
 import { Profile } from './profile.entity';
+import { Property } from './property.entity';
+import { Favorites } from './favorites.entity';
 
 export enum Role {
   GUEST = 'guest',
@@ -71,6 +73,14 @@ export class User {
 
   @OneToMany(() => ActivityLog, (log) => log.user, { onDelete: 'CASCADE' })
   activityLogs: ActivityLog[];
+
+  @OneToMany(() => Property, (property) => property.user, {
+    onDelete: 'CASCADE',
+  })
+  postedProperties: Property[];
+
+  @OneToMany(() => Favorites, (fav) => fav.user, { onDelete: 'CASCADE' })
+  favoriteProperties: Favorites[];
 }
 
 // @DeleteDateColumn is a special column that is automatically set

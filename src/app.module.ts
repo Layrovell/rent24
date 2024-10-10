@@ -10,6 +10,7 @@ import { ActivityLogModule } from './resources/activity-log/activity-log.module'
 import { ProfileModule } from './resources/profile/profile.module';
 import configuration from './config/configuration';
 import { TasksModule } from './resources/tasks/tasks.module';
+import { PropertyModule } from './resources/property/property.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TasksModule } from './resources/tasks/tasks.module';
     AuthModule,
     ActivityLogModule,
     ProfileModule,
+    PropertyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
