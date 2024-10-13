@@ -19,11 +19,13 @@ export class ActivityLogService {
   ) {
     // const user = await this.userService.getUserById(id);
 
-    const activityLog = this.activityLogRepository.create({
+    const newRecord = {
       user,
       activityType: activityType,
       description: description,
-    });
+    };
+
+    const activityLog = this.activityLogRepository.create(newRecord);
 
     await this.activityLogRepository.save(activityLog);
   }

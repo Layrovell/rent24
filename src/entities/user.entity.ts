@@ -40,6 +40,7 @@ export class User {
   @Column()
   @IsEmail()
   @IsNotEmpty()
+  @Column({ unique: true })
   email: string;
 
   @Column({ nullable: true })
@@ -64,12 +65,13 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastSignIn: Date;
 
-  @OneToOne(() => Profile, (profile) => profile.user, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @OneToOne(() => Profile, (profile) => profile.user, { onDelete: 'RESTRICT' })
+  //  In a one-to-one relationship, the side that owns the relationship gets the @JoinColumn()
+  @JoinColumn({ name: 'profileId' })
   profile: Profile; // Each user has one profile created at registration
 
-  @Column({ nullable: true })
-  profileId: number;
+  // @Column({ nullable: true })
+  // profileId: number;
 
   @OneToMany(() => ActivityLog, (log) => log.user, { onDelete: 'CASCADE' })
   activityLogs: ActivityLog[];

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Profile } from 'src/entities';
 
 import { Role } from 'src/entities/user.entity';
 
@@ -27,5 +28,5 @@ export class ViewUserDto {
   deletedAt: Date;
 
   @ApiProperty()
-  profileId: number;
+  profile: Profile;
 }

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 
-import { Property, User } from 'src/entities';
+import { Profile, Property, User } from 'src/entities';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,12 +16,15 @@ import { ActivityType } from 'src/entities/activity-log.entity';
 import { ProfileService } from '../profile/profile.service';
 import { ViewUserDto } from './dto/view-user.dto';
 import { Favorites } from 'src/entities/favorites.entity';
+import { CreateProfileDto } from '../profile/dto/create-profile.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(User)
     private userRepository: Repository<User>,
+    @Inject(Profile)
+    private profileRepository: Repository<Profile>,
     private readonly activityLogService: ActivityLogService, // Inject the activity log service
     private readonly securityService: SecurityService,
     private readonly profileService: ProfileService,
@@ -60,15 +63,23 @@ export class UsersService {
     return await this.userRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         try {
-          // Create the user first
           const createdUser = entityManager.create(User, dto);
+          console.log('createdUser:', JSON.stringify(createdUser, null, 4));
+
           const savedUser = await entityManager.save(createdUser);
+          console.log('savedUser:', JSON.stringify(savedUser, null, 4));
 
           // Create the blank profile
-          const profile =
-            await this.profileService.createBlankProfile(savedUser);
+          const createProfileDto: CreateProfileDto = new CreateProfileDto();
 
-          savedUser.profile = profile;
+          const blankProfile = entityManager.create(Profile, {
+            ...createProfileDto,
+            user: savedUser, // Associate the profile with the user
+          });
+
+          await entityManager.save(blankProfile);
+
+          savedUser.profile = blankProfile;
 
           // Save the user again to establish the relationship
           return await entityManager.save(savedUser);

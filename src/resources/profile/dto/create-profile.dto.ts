@@ -15,4 +15,7 @@ export class CreateProfileDto {
 
   @ApiProperty()
   isLookingForApartment: boolean;
+
+  @ApiProperty()
+  userId: number;
 }

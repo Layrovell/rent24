@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { User } from './user.entity';
 
@@ -28,6 +34,10 @@ export class Profile {
   // @Column('int', { array: true, default: [] })
   // postedProperties: number[];  // Properties listed by Owners or Agents
 
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, (user) => user.profile, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
   user: User; // The user this profile belongs to
 }

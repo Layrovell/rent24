@@ -31,7 +31,7 @@ export class ProfileService {
 
   async getProfileByUser(user: User): Promise<ViewUserProfileDto> {
     const existingUserProfile = await this.profileRepository.findOneBy({
-      id: user.profileId,
+      user,
     });
 
     if (!existingUserProfile) {
