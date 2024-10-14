@@ -14,7 +14,7 @@ import { User } from 'src/entities/user.entity';
 import { LoginDto, LoginResponseDto, RegisterDto } from './dto/auth.dto';
 import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
 import { ActivityLogService } from 'src/resources/activity-log/activity-log.service';
-import { ActivityType } from 'src/entities/activity-log.entity';
+import { ActivityCode } from 'src/lib/activities';
 
 @Injectable()
 export class AuthService {
@@ -85,11 +85,10 @@ export class AuthService {
 
     const newUser = await this.userService.createUser(data);
 
-    await this.activityLogService.createActivityLog(
-      newUser,
-      ActivityType.REGISTRATION,
-      'The user was created'
-    );
+    await this.activityLogService.createActivityLog({
+      user: newUser,
+      activityCode: ActivityCode.REGISTRATION,
+    });
 
     const tokens = await this.generateTokenPair(newUser);
 

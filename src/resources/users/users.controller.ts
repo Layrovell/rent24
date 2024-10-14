@@ -18,7 +18,7 @@ import { SameUserGuard } from 'src/guards/same-user.guard';
 import { ViewUserDto } from './dto/view-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
-import { ActivityLog } from 'src/entities';
+import { ViewActivityLogDto } from '../activity-log/dto/view-activity-log.dto';
 import { ProfileService } from '../profile/profile.service';
 import { ViewUserProfileDto } from '../profile/dto/view-profile.dto';
 import { UpdateUserProfileDto } from '../profile/dto/update-profile.dto';
@@ -64,7 +64,9 @@ export class UsersController {
 
   @Get(':id/activity-logs')
   @UseGuards(JwtAuthGuard, SameUserGuard)
-  async getActivityLogs(@Param('id') userId: number): Promise<ActivityLog[]> {
+  async getActivityLogs(
+    @Param('id') userId: number
+  ): Promise<ViewActivityLogDto[]> {
     return await this.activityLogService.getActivityLogsByUserId(userId);
   }
 
