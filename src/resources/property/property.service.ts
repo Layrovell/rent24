@@ -70,4 +70,8 @@ export class PropertyService {
 
     await this.propertyRepository.remove(existingProperty);
   }
+
+  async getAll(): Promise<Property[]> {
+    return await this.propertyRepository.find();
+  }
 }

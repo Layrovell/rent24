@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { PropertyService } from './property.service';
 import { PropertyController } from './property.controller';
@@ -7,9 +7,9 @@ import { UsersModule } from '../users/users.module';
 import { PropertyHelperProvider } from './property-helper.provider';
 
 @Module({
-  imports: [DatabaseModule, UsersModule],
+  imports: [DatabaseModule, forwardRef(() => UsersModule)],
   controllers: [PropertyController],
   providers: [PropertyService, PropertyHelperProvider],
-  exports: [PropertyHelperProvider],
+  exports: [PropertyService, PropertyHelperProvider],
 })
 export class PropertyModule {}

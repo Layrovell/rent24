@@ -7,15 +7,13 @@ import {
 } from '@nestjs/common';
 import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 
-import { Profile, Property, User } from 'src/entities';
+import { Profile, User } from 'src/entities';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ActivityType } from 'src/entities/activity-log.entity';
-import { ProfileService } from '../profile/profile.service';
 import { ViewUserDto } from './dto/view-user.dto';
-import { Favorites } from 'src/entities/favorites.entity';
 import { CreateProfileDto } from '../profile/dto/create-profile.dto';
 
 @Injectable()
@@ -23,15 +21,8 @@ export class UsersService {
   constructor(
     @Inject(User)
     private userRepository: Repository<User>,
-    @Inject(Profile)
-    private profileRepository: Repository<Profile>,
     private readonly activityLogService: ActivityLogService, // Inject the activity log service
-    private readonly securityService: SecurityService,
-    private readonly profileService: ProfileService,
-    @Inject(Favorites)
-    private readonly favoritesRepository: Repository<Favorites>,
-    @Inject(Property)
-    private readonly propertyRepository: Repository<Property>
+    private readonly securityService: SecurityService
   ) {}
 
   async getUserById(userId: number): Promise<User> {
@@ -94,7 +85,11 @@ export class UsersService {
   }
 
   async getAllUsers() {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({
+      relations: {
+        profile: true,
+      },
+    });
 
     if (!users.length) {
       throw new NotFoundException(`The list of users is empty`);
@@ -163,48 +158,5 @@ export class UsersService {
     console.log(`User ID ${userId} successfully recovered`);
 
     return existingUser; // Return the recovered user
-  }
-
-  async getFavorites(userId: number): Promise<Favorites[]> {
-    const user = await this.getUserById(userId);
-
-    const favorites = await this.favoritesRepository.find({
-      where: {
-        user: {
-          id: user.id,
-        },
-      },
-    });
-
-    return favorites;
-  }
-
-  async toggleFavorite(userId: number, propertyId: number): Promise<void> {
-    const user = await this.getUserById(userId);
-
-    const property = await this.propertyRepository.findOneBy({
-      id: propertyId,
-    });
-
-    if (!property) {
-      throw new NotFoundException(`Property with ID ${propertyId} not found`);
-    }
-
-    const favorite = await this.favoritesRepository.findOne({
-      where: {
-        user: { id: user.id },
-        property: { id: property.id },
-      },
-    });
-
-    if (favorite) {
-      await this.favoritesRepository.remove(favorite);
-    } else {
-      // If the favorite doesn't exist, add it (favorite)
-      const newFavorite = new Favorites();
-      newFavorite.user = user;
-      newFavorite.property = property;
-      await this.favoritesRepository.save(newFavorite);
-    }
   }
 }

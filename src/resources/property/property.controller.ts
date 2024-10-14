@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Req,
@@ -13,6 +14,7 @@ import { CreatePropertyDto } from './dto/create-property.dto';
 import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
+import { Property } from 'src/entities';
 
 @Controller('properties')
 export class PropertyController {
@@ -20,6 +22,11 @@ export class PropertyController {
     private readonly propertyService: PropertyService,
     private readonly propertyHelperProvider: PropertyHelperProvider
   ) {}
+
+  @Get('')
+  async getAll(): Promise<Property[]> {
+    return this.propertyService.getAll();
+  }
 
   @Post('')
   @UseGuards(JwtAuthGuard)
@@ -33,14 +40,12 @@ export class PropertyController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteProperty(@Param('id') propertyId: number, @Req() request: any) {
+  async deleteProperty(
+    @Param('id') propertyId: number,
+    @Req() request: any
+  ): Promise<void> {
     const currentUserId = request.user.id;
 
-    await this.propertyService.removeProperty(propertyId, currentUserId);
-
-    // as part of the HTTP response, not the business logic (service) itself
-    return {
-      message: `Property with the ID ${propertyId} successfully deleted`,
-    };
+    return await this.propertyService.removeProperty(propertyId, currentUserId);
   }
 }

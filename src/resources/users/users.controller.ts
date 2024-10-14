@@ -23,6 +23,7 @@ import { ProfileService } from '../profile/profile.service';
 import { ViewUserProfileDto } from '../profile/dto/view-profile.dto';
 import { UpdateUserProfileDto } from '../profile/dto/update-profile.dto';
 import { Favorites } from 'src/entities/favorites.entity';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @ApiTags('users')
 @Controller('users')
@@ -31,7 +32,8 @@ export class UsersController {
     private readonly userService: UsersService,
     private readonly userHelperProvider: UserHelperProvider,
     private readonly activityLogService: ActivityLogService,
-    private readonly profileService: ProfileService
+    private readonly profileService: ProfileService,
+    private readonly favoritesService: FavoritesService
   ) {}
 
   @Get('')
@@ -69,7 +71,7 @@ export class UsersController {
   @Get(':id/favorites')
   @UseGuards(JwtAuthGuard, SameUserGuard)
   async getUserFavorites(@Param('id') userId: number): Promise<Favorites[]> {
-    return this.userService.getFavorites(userId);
+    return this.favoritesService.getFavoritesByUserId(userId);
   }
 
   @Patch(':id/password')
@@ -105,7 +107,7 @@ export class UsersController {
     @Param('id') userId: number,
     @Param('propertyId') propertyId: number
   ): Promise<void> {
-    return this.userService.toggleFavorite(userId, propertyId);
+    return this.favoritesService.toggleFavorite(userId, propertyId);
   }
 
   @Delete(':id')

@@ -11,6 +11,7 @@ import { ProfileModule } from './resources/profile/profile.module';
 import configuration from './config/configuration';
 import { TasksModule } from './resources/tasks/tasks.module';
 import { PropertyModule } from './resources/property/property.module';
+import { FavoritesModule } from './resources/favorites/favorites.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PropertyModule } from './resources/property/property.module';
     ActivityLogModule,
     ProfileModule,
     PropertyModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

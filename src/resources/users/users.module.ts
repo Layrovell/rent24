@@ -8,6 +8,7 @@ import { SecurityModule } from 'src/security/security.module';
 import { ActivityLogModule } from '../activity-log/activity-log.module';
 import { UserHelperProvider } from './userMapper.provider';
 import { ProfileModule } from '../profile/profile.module';
+import { FavoritesModule } from '../favorites/favorites.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProfileModule } from '../profile/profile.module';
     SecurityModule,
     ActivityLogModule,
     ProfileModule,
+    FavoritesModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UserHelperProvider],
