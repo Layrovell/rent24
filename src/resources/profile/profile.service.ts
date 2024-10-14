@@ -4,9 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from 'src/entities';
 import { Profile } from 'src/entities/profile.entity';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { ViewUserProfileDto } from './dto/view-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-profile.dto';
-import { ActivityType } from 'src/entities/activity-log.entity';
+import { ActivityCode } from 'src/lib/activities';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 
 @Injectable()
@@ -29,9 +28,11 @@ export class ProfileService {
     return await this.profileRepository.save(blankProfile);
   }
 
-  async getProfileByUser(user: User): Promise<ViewUserProfileDto> {
-    const existingUserProfile = await this.profileRepository.findOneBy({
-      user,
+  async getProfileByUser(user: User): Promise<Profile> {
+    const existingUserProfile = await this.profileRepository.findOne({
+      where: {
+        user: { id: user.id },
+      },
     });
 
     if (!existingUserProfile) {
@@ -48,11 +49,10 @@ export class ProfileService {
     const existingUserProfile = await this.getProfileByUser(user);
 
     if (dto.description) {
-      await this.activityLogService.createActivityLog(
-        user,
-        ActivityType.PROFILE_UPDATE,
-        'The profile was updated'
-      );
+      await this.activityLogService.createActivityLog({
+        user: user,
+        activityCode: ActivityCode.PROFILE_UPDATE,
+      });
     }
 
     return await this.profileRepository.save({

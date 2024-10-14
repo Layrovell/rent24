@@ -12,9 +12,8 @@ import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
-import { ActivityType } from 'src/entities/activity-log.entity';
-import { ViewUserDto } from './dto/view-user.dto';
 import { CreateProfileDto } from '../profile/dto/create-profile.dto';
+import { ActivityCode } from 'src/lib/activities';
 
 @Injectable()
 export class UsersService {
@@ -120,11 +119,10 @@ export class UsersService {
       hashedPassword: newHashedPassword,
     });
 
-    await this.activityLogService.createActivityLog(
-      updatedUser,
-      ActivityType.PASSWORD_CHANGE,
-      'The password was changed'
-    );
+    await this.activityLogService.createActivityLog({
+      user: updatedUser,
+      activityCode: ActivityCode.PASSWORD_CHANGE,
+    });
 
     return !!updatedUser;
   }
@@ -136,7 +134,7 @@ export class UsersService {
     console.log(`SOFT deletion successful for user ID: ${userId}`);
   }
 
-  async recoverUser(userId: number): Promise<ViewUserDto> {
+  async recoverUser(userId: number): Promise<User> {
     const existingUser = await this.userRepository.findOne({
       where: {
         id: userId,

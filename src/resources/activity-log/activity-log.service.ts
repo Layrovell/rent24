@@ -1,40 +1,62 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { ActivityLog } from 'src/entities';
 import { User } from 'src/entities';
-import { ActivityType } from 'src/entities/activity-log.entity';
+import { ActivitiesService } from '../activities/activities.service';
+import { ActivityLogHelperProvider } from './activity-log-helper.provider';
+import { ViewActivityLogDto } from './dto/view-activity-log.dto';
 
 @Injectable()
 export class ActivityLogService {
   constructor(
     @Inject(ActivityLog)
-    private activityLogRepository: Repository<ActivityLog>
+    private readonly activityLogRepository: Repository<ActivityLog>,
+    private readonly activitiesService: ActivitiesService, // Inject ActivityTypeService
+    private readonly activityLogHelperProvider: ActivityLogHelperProvider
   ) {}
 
-  async createActivityLog(
-    user: User,
-    activityType: ActivityType,
-    description?: string
-  ) {
-    // const user = await this.userService.getUserById(id);
+  async getAll(): Promise<ActivityLog[]> {
+    return await this.activityLogRepository.find({
+      relations: {
+        activity: true,
+        user: true,
+      },
+    });
+  }
 
-    const newRecord = {
+  async createActivityLog({
+    user,
+    activityCode,
+  }: {
+    user: User;
+    activityCode: string;
+  }) {
+    const activity = await this.activitiesService.findByCode(activityCode);
+
+    if (!activity) {
+      throw new BadRequestException(`Invalid activity type: ${activityCode}`);
+    }
+
+    const activityLog = this.activityLogRepository.create({
       user,
-      activityType: activityType,
-      description: description,
-    };
-
-    const activityLog = this.activityLogRepository.create(newRecord);
+      activity,
+    });
 
     await this.activityLogRepository.save(activityLog);
   }
 
   // Fetch all activity logs for a user
-  async getActivityLogsByUserId(userId: number): Promise<ActivityLog[]> {
-    return await this.activityLogRepository.find({
+  async getActivityLogsByUserId(userId: number): Promise<ViewActivityLogDto[]> {
+    const data = await this.activityLogRepository.find({
       where: { user: { id: userId } },
-      order: { timestamp: 'DESC' }, // Order by most recent activity
+      relations: {
+        activity: true,
+        user: true,
+      },
+      order: { createdAt: 'DESC' }, // Order by most recent activity
     });
+
+    return this.activityLogHelperProvider.activitiesToViewDto(data);
   }
 }
