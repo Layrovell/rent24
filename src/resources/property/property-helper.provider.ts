@@ -32,7 +32,7 @@ export class PropertyHelperProvider {
     viewPropertyDto.pricePerMonth = property.pricePerMonth;
     viewPropertyDto.propertyType = property.propertyType;
     // or return the full user not just the ID?
-    viewPropertyDto.userId = property.user.id;
+    viewPropertyDto.user = property.user;
 
     viewPropertyDto.createdAt = property.createdAt;
     viewPropertyDto.updatedAt = property.updatedAt;

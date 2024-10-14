@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { PropertyType } from 'src/entities/property.entity';
+import { User } from 'src/entities';
 
 export class ViewPropertyDto {
   @ApiProperty()
@@ -37,5 +38,5 @@ export class ViewPropertyDto {
   updatedAt: Date;
 
   @ApiProperty()
-  userId: number;
+  user: User;
 }

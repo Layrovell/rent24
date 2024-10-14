@@ -8,6 +8,7 @@ import {
 import { Repository } from 'typeorm';
 
 import { CreatePropertyDto } from './dto/create-property.dto';
+import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UsersService } from '../users/users.service';
 import { Property } from 'src/entities';
 
@@ -59,6 +60,24 @@ export class PropertyService {
     });
 
     return this.propertyRepository.save(property);
+  }
+
+  async updateProperty(
+    propertyId: number,
+    userId: number,
+    dto: UpdatePropertyDto
+  ): Promise<Property> {
+    const existingProperty = await this.getPropertyById(propertyId);
+
+    if (userId !== existingProperty.user.id) {
+      throw new UnauthorizedException('You can not update this property');
+    }
+
+    return await this.propertyRepository.save({
+      id: existingProperty.id,
+      ...existingProperty,
+      ...dto,
+    });
   }
 
   async removeProperty(propertyId: number, userId: number): Promise<void> {

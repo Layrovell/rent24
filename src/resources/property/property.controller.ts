@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -15,6 +17,7 @@ import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
 import { Property } from 'src/entities';
+import { UpdatePropertyDto } from './dto/update-property.dto';
 
 @Controller('properties')
 export class PropertyController {
@@ -36,6 +39,34 @@ export class PropertyController {
     const property = await this.propertyService.createProperty(dto);
 
     return this.propertyHelperProvider.propertyToViewDto(property);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  async updateProperty(
+    @Param('id') propertyId: number,
+    @Req() request: any,
+    @Body() dto: UpdatePropertyDto
+  ): Promise<ViewPropertyDto> {
+    const currentUserId = request.user.id;
+
+    // TODO: Add reusable validator for invalid props
+    const invalidFields = ['city', 'country', 'userId'];
+    const bodyKeys = Object.keys(dto);
+
+    const invalidProps = bodyKeys.filter((key) => invalidFields.includes(key));
+
+    if (invalidProps.length > 0) {
+      throw new BadRequestException(
+        `Invalid fields: ${invalidProps.join(', ')}`
+      );
+    }
+
+    return await this.propertyService.updateProperty(
+      propertyId,
+      currentUserId,
+      dto
+    );
   }
 
   @Delete(':id')
