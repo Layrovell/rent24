@@ -8,12 +8,10 @@ import {
 import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 
 import { Profile, User } from 'src/entities';
-import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { CreateProfileDto } from '../profile/dto/create-profile.dto';
-import { ActivityCode } from 'src/lib/activities';
 
 @Injectable()
 export class UsersService {
@@ -97,34 +95,13 @@ export class UsersService {
     return users;
   }
 
-  async updatePassword(
-    id: number,
-    dto: UpdateUserPasswordDto
-  ): Promise<boolean> {
-    const existingUser = await this.getUserById(id);
+  async updateUserPassword(user: User, dto: Partial<User>) {
+    console.log('dto:', dto);
 
-    const isValidPassword = await this.securityService.compareData(
-      dto.oldPassword,
-      existingUser.hashedPassword
-    );
-
-    if (!isValidPassword) {
-      throw new BadRequestException('Wrong old password');
-    }
-
-    const newHashedPassword = await this.securityService.hashData(dto.password);
-
-    const updatedUser = await this.userRepository.save({
-      ...existingUser,
-      hashedPassword: newHashedPassword,
+    return await this.userRepository.save({
+      ...user,
+      ...dto,
     });
-
-    await this.activityLogService.createActivityLog({
-      user: updatedUser,
-      activityCode: ActivityCode.PASSWORD_CHANGE,
-    });
-
-    return !!updatedUser;
   }
 
   async softDeleteUser(userId: number): Promise<void> {

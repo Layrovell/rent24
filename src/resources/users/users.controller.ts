@@ -16,7 +16,6 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SameUserGuard } from 'src/guards/same-user.guard';
 
 import { ViewUserDto } from './dto/view-user.dto';
-import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ViewActivityLogDto } from '../activity-log/dto/view-activity-log.dto';
 import { ProfileService } from '../profile/profile.service';
@@ -74,16 +73,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, SameUserGuard)
   async getUserFavorites(@Param('id') userId: number): Promise<Favorites[]> {
     return this.favoritesService.getFavoritesByUserId(userId);
-  }
-
-  @Patch(':id/password')
-  @UseGuards(JwtAuthGuard, SameUserGuard)
-  // SameUserGuard: checks if id param same as id from the token
-  updatePassword(
-    @Param('id') id: number,
-    @Body() dto: UpdateUserPasswordDto
-  ): Promise<boolean> {
-    return this.userService.updatePassword(id, dto);
   }
 
   @Put('recovery/:id')

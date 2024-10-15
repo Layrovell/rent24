@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -15,6 +16,7 @@ import { LoginDto, LoginResponseDto, RegisterDto } from './dto/auth.dto';
 import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
 import { ActivityLogService } from 'src/resources/activity-log/activity-log.service';
 import { ActivityCode } from 'src/lib/activities';
+import { UpdateUserPasswordDto } from 'src/resources/users/dto/update-user-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -93,5 +95,37 @@ export class AuthService {
     const tokens = await this.generateTokenPair(newUser);
 
     return { ...tokens };
+  }
+
+  async updatePassword(
+    id: number,
+    dto: UpdateUserPasswordDto
+  ): Promise<boolean> {
+    const existingUser = await this.userService.getUserById(id);
+
+    const isValidPassword = await this.securityService.compareData(
+      dto.oldPassword,
+      existingUser.hashedPassword
+    );
+
+    if (!isValidPassword) {
+      throw new BadRequestException('Wrong old password');
+    }
+
+    const newHashedPassword = await this.securityService.hashData(dto.password);
+
+    const updatedUser = await this.userService.updateUserPassword(
+      existingUser,
+      {
+        hashedPassword: newHashedPassword,
+      }
+    );
+
+    await this.activityLogService.createActivityLog({
+      user: updatedUser,
+      activityCode: ActivityCode.PASSWORD_CHANGE,
+    });
+
+    return !!updatedUser;
   }
 }
