@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ActivitiesService } from './activities.service';
 import { activitiesSeedData } from 'src/lib/activities';
@@ -11,6 +11,8 @@ export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Post('')
+  // TODO: replace endpoint with separate script
+  @ApiResponse({ status: 201, description: 'Activities loaded to the table' })
   async createActivities(): Promise<Activities[]> {
     return await this.activitiesService.create(activitiesSeedData);
   }

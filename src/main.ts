@@ -20,10 +20,23 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Rent24')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'jwt',
+      },
+      'jwt'
+    )
     .setDescription('The rent24 API description')
     .setVersion('1.0')
     .addTag('auth')
     .addTag('users')
+    .addTag('favorites')
+    .addTag('activity-logs')
+    .addTag('properties')
+    .addTag('activities')
     .addServer(url)
     .build();
 

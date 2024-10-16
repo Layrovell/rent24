@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CreatePropertyDto } from './dto/create-property.dto';
@@ -19,6 +20,7 @@ import { PropertyHelperProvider } from './property-helper.provider';
 import { Property } from 'src/entities';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 
+@ApiTags('properties')
 @Controller('properties')
 export class PropertyController {
   constructor(
