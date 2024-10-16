@@ -121,8 +121,8 @@ Check out a few resources that may come in handy when working with NestJS:
 3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities.
 4. Subscribtions system, that alow user to act as an agent.
 5. Email recover and change using email module.
-6. Run over app security (XSS, Cookie, CORS policies).
+6. Run over app security (xss, cookie, cors policies).
 7. Add moderation stage to property posting. Ex. the one can be posted but with some flag 'isModerated' and after property is moderated it will displayed with other as well.
-8. Tests set up.
+8. Tests set up and coverage.
 9. Add user sessions to be logged in in different devices and track it allowing to delete a muddy (suspicious) session.
 10. TBC
