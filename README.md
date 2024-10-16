@@ -1,6 +1,6 @@
 <p align="center">
   <a href="http://nestjs.com/" target="_blank">
-    <img src="src/assets/logo.svg" width="132" height="40" />
+    <img src="src/assets/logo.svg" width="200" height="60" />
   </a>
 </p>
 
