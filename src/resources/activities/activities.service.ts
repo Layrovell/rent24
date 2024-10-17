@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { Activities } from 'src/entities/activities.entity';
-import { ViewActivitiesDto } from './dto/create-activity.dto';
+import { CreateActivitiesDto } from './dto/create-activity.dto';
 
 @Injectable()
 export class ActivitiesService {
@@ -19,7 +19,7 @@ export class ActivitiesService {
     return await this.activitiesRepository.find();
   }
 
-  async create(dto: ViewActivitiesDto[]): Promise<Activities[]> {
+  async create(dto: CreateActivitiesDto[]): Promise<Activities[]> {
     return await this.activitiesRepository.save(dto);
   }
 }

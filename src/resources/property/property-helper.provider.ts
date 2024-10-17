@@ -16,6 +16,8 @@ export class PropertyHelperProvider {
   propertyToViewDto(property: Property): ViewPropertyDto {
     const viewPropertyDto = new ViewPropertyDto();
 
+    console.log('property:', property);
+
     // const { user, ...rest } = property;
     // viewPropertyDto = {
     //   ...rest,
@@ -33,6 +35,8 @@ export class PropertyHelperProvider {
     viewPropertyDto.propertyType = property.propertyType;
     // or return the full user not just the ID?
     viewPropertyDto.user = property.user;
+    // viewPropertyDto.userId = property.user.id;
+    // viewPropertyDto.detailsId = property.details.id;
 
     viewPropertyDto.createdAt = property.createdAt;
     viewPropertyDto.updatedAt = property.updatedAt;

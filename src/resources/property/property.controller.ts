@@ -33,6 +33,11 @@ export class PropertyController {
     return this.propertyService.getAll();
   }
 
+  @Get(':id')
+  async getById(@Param('id') propertyId: number) {
+    return await this.propertyService.getPropertyById(propertyId);
+  }
+
   @Post('')
   @UseGuards(JwtAuthGuard)
   async createProperty(

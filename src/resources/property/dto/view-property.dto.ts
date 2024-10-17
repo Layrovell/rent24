@@ -39,4 +39,10 @@ export class ViewPropertyDto {
 
   @ApiProperty()
   user: User;
+
+  // @ApiProperty()
+  // userId: number;
+
+  @ApiProperty()
+  detailsId: number;
 }

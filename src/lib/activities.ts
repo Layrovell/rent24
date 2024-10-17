@@ -158,3 +158,9 @@ export const activitiesSeedData: { code: ActivityCode; description: string }[] =
     },
     { code: ActivityCode.OTHER, description: 'Miscellaneous user activity' },
   ];
+
+export const wallTypesSeedData = [
+  { code: 'wood', description: 'Made with wood...' },
+  { code: 'brick', description: 'Constructed with bricks...' },
+  { code: 'concrete', description: 'Built with concrete...' },
+];

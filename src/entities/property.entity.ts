@@ -5,12 +5,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { User } from './user.entity';
 import { Favorites } from './favorites.entity';
+import { PropertyDetails } from './property-details.entity';
 
 export enum PropertyType {
   ROOM = 'room',
@@ -62,12 +64,20 @@ export class Property {
   @JoinColumn({ name: 'userId' }) // The foreign key column
   user: User;
 
+  // @Column()
+  // userId: number;
+
   @OneToMany(() => Favorites, (favoriteProperty) => favoriteProperty.property)
   favoritedBy: Favorites[];
 
-  // @OneToOne(() => PropertyDetails, (details) => details.property, { cascade: true })
-  // @JoinColumn()
-  // details: PropertyDetails;
+  @OneToOne(() => PropertyDetails, (details) => details.property, {
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'detailsId' })
+  details: PropertyDetails;
+
+  @Column({ nullable: true })
+  detailsId: number;
 
   @CreateDateColumn()
   createdAt: Date;
