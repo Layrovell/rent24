@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UsersService } from '../users/users.service';
-import { Property } from 'src/entities';
+import { Property, PropertyDetails } from 'src/entities';
 
 @Injectable()
 export class PropertyService {
@@ -29,6 +29,7 @@ export class PropertyService {
       },
       relations: {
         user: true,
+        // details: true,
       },
     });
 
@@ -65,7 +66,8 @@ export class PropertyService {
   async updateProperty(
     propertyId: number,
     userId: number,
-    dto: UpdatePropertyDto
+    dto: UpdatePropertyDto,
+    details?: PropertyDetails
   ): Promise<Property> {
     const existingProperty = await this.getPropertyById(propertyId);
 
@@ -77,6 +79,7 @@ export class PropertyService {
       id: existingProperty.id,
       ...existingProperty,
       ...dto,
+      details,
     });
   }
 
@@ -91,6 +94,11 @@ export class PropertyService {
   }
 
   async getAll(): Promise<Property[]> {
-    return await this.propertyRepository.find();
+    return await this.propertyRepository.find({
+      // relations: {
+      //   user: true,
+      //   details: true,
+      // },
+    });
   }
 }

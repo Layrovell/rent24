@@ -10,7 +10,7 @@ import { Activities } from 'src/entities';
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
-  @Post('')
+  @Post('load')
   // TODO: replace endpoint with separate script
   @ApiResponse({ status: 201, description: 'Activities loaded to the table' })
   async createActivities(): Promise<Activities[]> {
