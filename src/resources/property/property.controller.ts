@@ -17,7 +17,6 @@ import { CreatePropertyDto } from './dto/create-property.dto';
 import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
-import { Property } from 'src/entities';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 
 @ApiTags('properties')
@@ -29,13 +28,15 @@ export class PropertyController {
   ) {}
 
   @Get('')
-  async getAll(): Promise<Property[]> {
-    return this.propertyService.getAll();
+  async getAll(): Promise<ViewPropertyDto[]> {
+    const properties = await this.propertyService.getAll();
+    return this.propertyHelperProvider.propertiesToViewDto(properties);
   }
 
   @Get(':id')
-  async getById(@Param('id') propertyId: number) {
-    return await this.propertyService.getPropertyById(propertyId);
+  async getById(@Param('id') propertyId: number): Promise<ViewPropertyDto> {
+    const property = await this.propertyService.getPropertyById(propertyId);
+    return this.propertyHelperProvider.propertyToViewDto(property);
   }
 
   @Post('')

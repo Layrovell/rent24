@@ -64,8 +64,8 @@ export class Property {
   @JoinColumn({ name: 'userId' }) // The foreign key column
   user: User;
 
-  // @Column()
-  // userId: number;
+  @Column()
+  userId: number;
 
   @OneToMany(() => Favorites, (favoriteProperty) => favoriteProperty.property)
   favoritedBy: Favorites[];

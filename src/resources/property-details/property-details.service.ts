@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
@@ -10,6 +11,7 @@ import { PropertyDetails } from 'src/entities';
 import { CreatePropertyDetailsDto } from './dto/create-property-details.dto';
 import { PropertyService } from '../property/property.service';
 import { WallTypeService } from '../wall-type/wall-type.service';
+import { UpdatePropertyDetailsDto } from './dto/update-property-details.dto';
 
 @Injectable()
 export class PropertyDetailsService {
@@ -19,6 +21,18 @@ export class PropertyDetailsService {
     private readonly propertyService: PropertyService,
     private readonly wallTypeService: WallTypeService
   ) {}
+
+  async getById(detailsId: number): Promise<PropertyDetails> {
+    const existingDetails = await this.propertyDetailsRepository.findOneBy({
+      id: detailsId,
+    });
+
+    if (!existingDetails) {
+      throw new NotFoundException(`Details with ID ${detailsId} not found`);
+    }
+
+    return existingDetails;
+  }
 
   async createDetails(
     propertyId: number,
@@ -40,8 +54,8 @@ export class PropertyDetailsService {
       );
     }
 
-    const existingDetails = await this.propertyDetailsRepository.findOne({
-      where: { propertyId: existingProperty.id },
+    const existingDetails = await this.propertyDetailsRepository.findOneBy({
+      propertyId: existingProperty.id,
     });
 
     if (existingDetails) {
@@ -55,7 +69,6 @@ export class PropertyDetailsService {
       wallType: existingWallType,
       property: existingProperty,
     });
-    console.log('DETAILS:', details);
 
     await this.propertyService.updateProperty(
       existingProperty.id,
@@ -65,5 +78,17 @@ export class PropertyDetailsService {
     );
 
     return details;
+  }
+
+  async updateById(
+    propertyId: number,
+    dto: UpdatePropertyDetailsDto
+  ): Promise<PropertyDetails> {
+    const existingDetails = await this.getById(propertyId);
+
+    return await this.propertyDetailsRepository.save({
+      id: existingDetails.id,
+      ...dto,
+    });
   }
 }

@@ -29,7 +29,7 @@ export class PropertyService {
       },
       relations: {
         user: true,
-        // details: true,
+        details: true,
       },
     });
 
@@ -95,10 +95,10 @@ export class PropertyService {
 
   async getAll(): Promise<Property[]> {
     return await this.propertyRepository.find({
-      // relations: {
-      //   user: true,
-      //   details: true,
-      // },
+      relations: {
+        user: true,
+        details: true,
+      },
     });
   }
 }

@@ -1,9 +1,11 @@
 import { IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+import { WallType } from 'src/entities';
+
 export class CreatePropertyDetailsDto {
   @ApiProperty()
-  wallType: string;
+  wallType: WallType;
 
   @ApiProperty()
   yearBuilt: number;
