@@ -16,14 +16,6 @@ export class PropertyHelperProvider {
   propertyToViewDto(property: Property): ViewPropertyDto {
     const viewPropertyDto = new ViewPropertyDto();
 
-    console.log('property:', property);
-
-    // const { user, ...rest } = property;
-    // viewPropertyDto = {
-    //   ...rest,
-    //   userId: property.user.id,
-    // };
-
     viewPropertyDto.id = property.id;
     viewPropertyDto.title = property.title;
     viewPropertyDto.description = property.description;

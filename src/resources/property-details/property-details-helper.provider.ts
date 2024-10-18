@@ -18,8 +18,6 @@ export class PropertyDetailsHelperProvider {
   propertyDetailsToViewDto(detail: PropertyDetails): ViewPropertyDetailsDto {
     const viewPropertyDetailsDto = new ViewPropertyDetailsDto();
 
-    console.log('detail:', detail);
-
     viewPropertyDetailsDto.id = detail.id;
     viewPropertyDetailsDto.wallType = detail.wallType;
     viewPropertyDetailsDto.yearBuilt = detail.yearBuilt;
