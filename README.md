@@ -114,10 +114,17 @@ Check out a few resources that may come in handy when working with NestJS:
 - [NestJS Documentation](https://docs.nestjs.com);
 - [TypeORM Documentation](https://typeorm.io);
 
-# TODO
+## Important
 
-1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc). <br/> <span style="color: lightgreen">(in process)</span>
+1. Users are not able to update/delete data that don't belong them (properties, profiles, etc). They are restricted from actions that not related to them.
+2. Some or users actions are tracked such as registration, updating the profile or post the property to make a history of user actions.
+3. Base 'user' allowa to create 5 peoperties at most. To create more they should have an 'agent' role. 
+
+## TODO
+
+1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc).
 2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc).
+ <br/> <span style="color: lightgreen">(in process)</span>
 3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities.
 4. Subscribtions system, that alow user to act as an agent.
 5. Email recover and change using email module.
