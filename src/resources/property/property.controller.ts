@@ -18,13 +18,18 @@ import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { CreatePropertyDetailsDto } from '../property-details/dto/create-property-details.dto';
+import { ViewPropertyDetailsDto } from '../property-details/dto/view-property-details.dto';
+import { PropertyDetailsHelperProvider } from '../property-details/property-details-helper.provider';
+import { UpdatePropertyDetailsDto } from '../property-details/dto/update-property-details.dto';
 
 @ApiTags('properties')
 @Controller('properties')
 export class PropertyController {
   constructor(
     private readonly propertyService: PropertyService,
-    private readonly propertyHelperProvider: PropertyHelperProvider
+    private readonly propertyHelperProvider: PropertyHelperProvider,
+    private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider
   ) {}
 
   @Get('')
@@ -39,6 +44,11 @@ export class PropertyController {
     return this.propertyHelperProvider.propertyToViewDto(property);
   }
 
+  @Get(':id/details')
+  async getPropertyDetails(@Param('id') id: number): Promise<any> {
+    return await this.propertyService.getPropertyDetails(id);
+  }
+
   @Post('')
   @UseGuards(JwtAuthGuard)
   async createProperty(
@@ -47,6 +57,24 @@ export class PropertyController {
     const property = await this.propertyService.createProperty(dto);
 
     return this.propertyHelperProvider.propertyToViewDto(property);
+  }
+
+  @Post(':id/details')
+  @UseGuards(JwtAuthGuard)
+  async postDetailsByPropertyId(
+    @Param('id') id: number,
+    @Body() dto: CreatePropertyDetailsDto,
+    @Req() request: any
+  ): Promise<ViewPropertyDetailsDto> {
+    const currentUserId = request.user.id;
+
+    const details = await this.propertyService.addDetailsToProperty(
+      id,
+      dto,
+      currentUserId
+    );
+
+    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(details);
   }
 
   @Patch(':id')
@@ -74,6 +102,26 @@ export class PropertyController {
       propertyId,
       currentUserId,
       dto
+    );
+  }
+
+  @Patch(':id/details')
+  @UseGuards(JwtAuthGuard)
+  async updatePropertyDetails(
+    @Param('id') id: number,
+    @Req() request: any,
+    @Body() dto: UpdatePropertyDetailsDto
+  ): Promise<ViewPropertyDetailsDto> {
+    const currentUserId = request.user.id;
+
+    const updatedDetails = await this.propertyService.updatePropertyDetails(
+      id,
+      dto,
+      currentUserId
+    );
+
+    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(
+      updatedDetails
     );
   }
 

@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { Property } from './property.entity';
@@ -53,4 +55,10 @@ export class PropertyDetails {
 
   @Column({ nullable: true })
   maxResidents: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -3,13 +3,11 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
-import { PropertyDetails } from 'src/entities';
+import { Property, PropertyDetails } from 'src/entities';
 import { CreatePropertyDetailsDto } from './dto/create-property-details.dto';
-import { PropertyService } from '../property/property.service';
 import { WallTypeService } from '../wall-type/wall-type.service';
 import { UpdatePropertyDetailsDto } from './dto/update-property-details.dto';
 
@@ -18,7 +16,6 @@ export class PropertyDetailsService {
   constructor(
     @Inject(PropertyDetails)
     private readonly propertyDetailsRepository: Repository<PropertyDetails>,
-    private readonly propertyService: PropertyService,
     private readonly wallTypeService: WallTypeService
   ) {}
 
@@ -35,60 +32,51 @@ export class PropertyDetailsService {
   }
 
   async createDetails(
-    propertyId: number,
-    userId: number,
+    property: Property,
     dto: CreatePropertyDetailsDto
-  ): Promise<PropertyDetails> {
+  ): Promise<any> {
     const { wallType } = dto; // wallType code
 
     const existingWallType = await this.wallTypeService.getByCode(
       wallType as any
     );
 
-    const existingProperty =
-      await this.propertyService.getPropertyById(propertyId);
-
-    if (userId !== existingProperty.user.id) {
-      throw new UnauthorizedException(
-        'You can not create details for this property'
-      );
-    }
-
     const existingDetails = await this.propertyDetailsRepository.findOneBy({
-      propertyId: existingProperty.id,
+      propertyId: property.id,
     });
 
     if (existingDetails) {
       throw new BadRequestException(
-        `Details for property with ID ${existingProperty.id} were already created`
+        `Details for property with ID ${property.id} were already created`
       );
     }
 
     const details = await this.propertyDetailsRepository.save({
       ...dto,
       wallType: existingWallType,
-      property: existingProperty,
+      property: property,
     });
-
-    await this.propertyService.updateProperty(
-      existingProperty.id,
-      userId,
-      {},
-      details
-    );
 
     return details;
   }
 
   async updateById(
-    propertyId: number,
+    detailsId: number,
     dto: UpdatePropertyDetailsDto
   ): Promise<PropertyDetails> {
-    const existingDetails = await this.getById(propertyId);
+    const existingDetails = await this.getById(detailsId);
+
+    const { wallType } = dto; // wallType code
+
+    const existingWallType = await this.wallTypeService.getByCode(
+      wallType as any
+    );
 
     return await this.propertyDetailsRepository.save({
       id: existingDetails.id,
+      ...existingDetails,
       ...dto,
+      wallType: existingWallType,
     });
   }
 }
