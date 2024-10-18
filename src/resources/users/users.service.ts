@@ -96,8 +96,6 @@ export class UsersService {
   }
 
   async updateUserPassword(user: User, dto: Partial<User>) {
-    console.log('dto:', dto);
-
     return await this.userRepository.save({
       ...user,
       ...dto,

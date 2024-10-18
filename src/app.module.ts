@@ -13,6 +13,8 @@ import { TasksModule } from './resources/tasks/tasks.module';
 import { PropertyModule } from './resources/property/property.module';
 import { FavoritesModule } from './resources/favorites/favorites.module';
 import { ActivitiesModule } from './resources/activities/activities.module';
+import { PropertyDetailsModule } from './resources/property-details/property-details.module';
+import { WallTypeModule } from './resources/wall-type/wall-type.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { ActivitiesModule } from './resources/activities/activities.module';
     PropertyModule,
     FavoritesModule,
     ActivitiesModule,
+    PropertyDetailsModule,
+    WallTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

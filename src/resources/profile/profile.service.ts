@@ -44,7 +44,10 @@ export class ProfileService {
     return existingUserProfile;
   }
 
-  async updateProfileByUser(user: User, dto: UpdateUserProfileDto) {
+  async updateProfileByUser(
+    user: User,
+    dto: UpdateUserProfileDto
+  ): Promise<Profile> {
     // TODO: Is it good for getting the Profile pass the user instead of injecting userService?
     const existingUserProfile = await this.getProfileByUser(user);
 

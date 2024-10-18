@@ -16,12 +16,6 @@ export class PropertyHelperProvider {
   propertyToViewDto(property: Property): ViewPropertyDto {
     const viewPropertyDto = new ViewPropertyDto();
 
-    // const { user, ...rest } = property;
-    // viewPropertyDto = {
-    //   ...rest,
-    //   userId: property.user.id,
-    // };
-
     viewPropertyDto.id = property.id;
     viewPropertyDto.title = property.title;
     viewPropertyDto.description = property.description;
@@ -32,7 +26,9 @@ export class PropertyHelperProvider {
     viewPropertyDto.pricePerMonth = property.pricePerMonth;
     viewPropertyDto.propertyType = property.propertyType;
     // or return the full user not just the ID?
-    viewPropertyDto.user = property.user;
+    // viewPropertyDto.user = property.user;
+    viewPropertyDto.userId = property.user.id;
+    viewPropertyDto.detailsId = property.detailsId; // since details.id can be null
 
     viewPropertyDto.createdAt = property.createdAt;
     viewPropertyDto.updatedAt = property.updatedAt;
