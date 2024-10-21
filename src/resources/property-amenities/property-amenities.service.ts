@@ -32,22 +32,20 @@ export class PropertyAmenitiesService {
   }
 
   async addByPropertyId(propertyId: number, dto: CreatePropertyAmenityDto[]) {
-    console.log('=== dto ===:', dto);
-
     const propertyAmenitiesPromises = dto.map(async (amenity) => {
-      const validAmenity = await this.amenitiesService.getByName(amenity.name);
+      const validAmenity = await this.amenitiesService.getByName(amenity.code);
 
       const existingAmenity = await this.propertyAmenitiesRepository.findOne({
         where: {
           property: { id: propertyId },
-          amenity: validAmenity,
+          amenity: { id: validAmenity.id },
         },
       });
 
       // If property with the same amenity already exists, return null; otherwise, create a new one
       if (existingAmenity) {
         console.log(
-          `Amenity ${amenity.name} already exists for property ${propertyId}. Skipping...`
+          `Amenity ${amenity.code} already exists for property ${propertyId}. Skipping...`
         );
         return null; // Skip the existing amenity
       }
@@ -61,14 +59,11 @@ export class PropertyAmenitiesService {
 
     const propertyAmenities = await Promise.all(propertyAmenitiesPromises);
 
-    console.log('propertyAmenities:', propertyAmenities);
-
     // Filter out any null values (existing amenities) and check for valid amenities before saving
     const filteredAmenities = propertyAmenities.filter(
       (amenity): amenity is PropertyAmenities => amenity !== null // Type guard to ensure it's not null
     );
 
-    // Save the resolved property amenities if there are any
     if (filteredAmenities.length > 0) {
       await this.propertyAmenitiesRepository.save(filteredAmenities);
     }

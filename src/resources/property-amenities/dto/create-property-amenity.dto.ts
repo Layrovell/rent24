@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreatePropertyAmenityDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  code: string;
 
   @ApiProperty()
   value: number | boolean; // Can be a number or a boolean based on the amenity

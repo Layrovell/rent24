@@ -30,7 +30,7 @@ export class AmenitiesService {
     const existingRecord = await this.amenitiesRepository.findOneBy({ code });
 
     if (existingRecord) {
-      throw new BadRequestException(`Amenity with name ${name} already exists`);
+      throw new BadRequestException(`Amenity with code ${code} already exists`);
     }
 
     const amenity = this.amenitiesRepository.create({
@@ -56,7 +56,7 @@ export class AmenitiesService {
     const existing = await this.amenitiesRepository.findOneBy({ code });
 
     if (!existing) {
-      throw new NotFoundException(`Amenity with name ${name} not found`);
+      throw new NotFoundException(`Amenity with code ${code} not found`);
     }
 
     return existing;
