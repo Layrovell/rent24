@@ -15,6 +15,8 @@ import { FavoritesModule } from './resources/favorites/favorites.module';
 import { ActivitiesModule } from './resources/activities/activities.module';
 import { PropertyDetailsModule } from './resources/property-details/property-details.module';
 import { WallTypeModule } from './resources/wall-type/wall-type.module';
+import { AmenitiesModule } from './resources/amenities/amenities.module';
+import { PropertyAmenitiesModule } from './resources/property-amenities/property-amenities.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { WallTypeModule } from './resources/wall-type/wall-type.module';
     ActivitiesModule,
     PropertyDetailsModule,
     WallTypeModule,
+    AmenitiesModule,
+    PropertyAmenitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -22,6 +22,9 @@ import { CreatePropertyDetailsDto } from '../property-details/dto/create-propert
 import { ViewPropertyDetailsDto } from '../property-details/dto/view-property-details.dto';
 import { PropertyDetailsHelperProvider } from '../property-details/property-details-helper.provider';
 import { UpdatePropertyDetailsDto } from '../property-details/dto/update-property-details.dto';
+import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
+import { PropertyAmenitiesHelperProvider } from '../property-amenities/property-amenities-helper.provider';
+import { ViewPropertyAmenitiesDto } from '../property-amenities/dto/view-property-amenities.dto';
 
 @ApiTags('properties')
 @Controller('properties')
@@ -29,7 +32,8 @@ export class PropertyController {
   constructor(
     private readonly propertyService: PropertyService,
     private readonly propertyHelperProvider: PropertyHelperProvider,
-    private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider
+    private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider,
+    private readonly propertyAmenitiesHelperProvider: PropertyAmenitiesHelperProvider
   ) {}
 
   @Get('')
@@ -47,6 +51,15 @@ export class PropertyController {
   @Get(':id/details')
   async getPropertyDetails(@Param('id') id: number): Promise<any> {
     return await this.propertyService.getPropertyDetails(id);
+  }
+
+  @Get(':id/amenities')
+  async getPropertyAmenities(
+    @Param('id') id: number
+  ): Promise<ViewPropertyAmenitiesDto[]> {
+    const records = await this.propertyService.getAmenities(id);
+
+    return this.propertyAmenitiesHelperProvider.listToViewDto(records);
   }
 
   @Post('')
@@ -75,6 +88,18 @@ export class PropertyController {
     );
 
     return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(details);
+  }
+
+  @Post(':id/amenities')
+  @UseGuards(JwtAuthGuard)
+  async postAmenitiesByPropertyId(
+    @Param('id') id: number,
+    @Body() dto: CreatePropertyAmenityDto[],
+    @Req() request: any
+  ): Promise<void> {
+    const currentUserId = request.user.id;
+
+    return await this.propertyService.addAmenities(id, dto, currentUserId);
   }
 
   @Patch(':id')
@@ -135,4 +160,6 @@ export class PropertyController {
 
     return await this.propertyService.removeProperty(propertyId, currentUserId);
   }
+
+  // @Delete() all amenities in property by id
 }

@@ -6,3 +6,5 @@ export { Favorites } from './favorites.entity';
 export { Activities } from './activities.entity';
 export { PropertyDetails } from './property-details.entity';
 export { WallType } from './wall-types.entity';
+export { Amenities } from './amenities.entity';
+export { PropertyAmenities } from './property-amenities.entity';

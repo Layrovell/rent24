@@ -13,6 +13,7 @@ import {
 import { User } from './user.entity';
 import { Favorites } from './favorites.entity';
 import { PropertyDetails } from './property-details.entity';
+import { PropertyAmenities } from './property-amenities.entity';
 
 export enum PropertyType {
   ROOM = 'room',
@@ -54,9 +55,8 @@ export class Property {
   @Column({ default: false })
   longTerm: boolean;
 
-  // @ManyToMany(() => Amenity, (amenity) => amenity.properties, { cascade: true })
-  // @JoinTable()
-  // amenities: Amenity[];
+  @OneToMany(() => PropertyAmenities, (amenity) => amenity.property)
+  amenities: PropertyAmenities[];
 
   @ManyToOne(() => User, (user) => user.postedProperties, {
     onDelete: 'CASCADE',

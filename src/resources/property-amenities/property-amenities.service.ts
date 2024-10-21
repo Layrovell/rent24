@@ -1,0 +1,76 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+
+import { PropertyAmenities } from 'src/entities/property-amenities.entity';
+import { CreatePropertyAmenityDto } from './dto/create-property-amenity.dto';
+import { AmenitiesService } from '../amenities/amenities.service';
+
+@Injectable()
+export class PropertyAmenitiesService {
+  constructor(
+    @Inject(PropertyAmenities)
+    private readonly propertyAmenitiesRepository: Repository<PropertyAmenities>,
+    private readonly amenitiesService: AmenitiesService
+  ) {}
+
+  async getByPropertyId(propertyId: number): Promise<PropertyAmenities[]> {
+    return await this.propertyAmenitiesRepository.find({
+      where: {
+        property: { id: propertyId },
+      },
+      relations: {
+        amenity: true,
+        property: true,
+      },
+    });
+  }
+
+  async deleteAmenitiesByPropertyId(propertyId: number): Promise<void> {
+    await this.propertyAmenitiesRepository.delete({
+      property: { id: propertyId },
+    });
+  }
+
+  async addByPropertyId(propertyId: number, dto: CreatePropertyAmenityDto[]) {
+    console.log('=== dto ===:', dto);
+
+    const propertyAmenitiesPromises = dto.map(async (amenity) => {
+      const validAmenity = await this.amenitiesService.getByName(amenity.name);
+
+      const existingAmenity = await this.propertyAmenitiesRepository.findOne({
+        where: {
+          property: { id: propertyId },
+          amenity: validAmenity,
+        },
+      });
+
+      // If property with the same amenity already exists, return null; otherwise, create a new one
+      if (existingAmenity) {
+        console.log(
+          `Amenity ${amenity.name} already exists for property ${propertyId}. Skipping...`
+        );
+        return null; // Skip the existing amenity
+      }
+
+      return this.propertyAmenitiesRepository.create({
+        property: { id: propertyId },
+        amenity: validAmenity,
+        value: amenity.value,
+      });
+    });
+
+    const propertyAmenities = await Promise.all(propertyAmenitiesPromises);
+
+    console.log('propertyAmenities:', propertyAmenities);
+
+    // Filter out any null values (existing amenities) and check for valid amenities before saving
+    const filteredAmenities = propertyAmenities.filter(
+      (amenity): amenity is PropertyAmenities => amenity !== null // Type guard to ensure it's not null
+    );
+
+    // Save the resolved property amenities if there are any
+    if (filteredAmenities.length > 0) {
+      await this.propertyAmenitiesRepository.save(filteredAmenities);
+    }
+  }
+}

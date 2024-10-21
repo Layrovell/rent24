@@ -79,4 +79,14 @@ export class PropertyDetailsService {
       wallType: existingWallType,
     });
   }
+
+  async getTableSchema() {
+    const metadata = this.propertyDetailsRepository.metadata;
+    const columns = metadata.columns.map((column) => ({
+      name: column.propertyName,
+      type: column.type,
+    }));
+
+    return columns;
+  }
 }
