@@ -122,9 +122,8 @@ Check out a few resources that may come in handy when working with NestJS:
 
 ## TODO
 
-1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc).
-2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc).
- <br/> <span style="color: lightgreen">(in process)</span>
+1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc). *(done)*
+2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc). <br/> *(in process)*
 3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities.
 4. Subscribtions system, that alow user to act as an agent.
 5. Email recover and change using email module.
