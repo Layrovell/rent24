@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAmenityDto {
   @ApiProperty()
+  @IsString()
   description: string;
 
   @ApiProperty()
