@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 
 import { Amenities } from 'src/entities/amenities.entity';
 import { CreateAmenityDto } from './dto/create-amenity.dto';
+import { UpdateAmenityDto } from './dto/update-amenity.dto';
 
 @Injectable()
 export class AmenitiesService {
@@ -40,6 +41,26 @@ export class AmenitiesService {
     });
 
     return await this.amenitiesRepository.save(amenity);
+  }
+
+  async getById(id: number): Promise<Amenities> {
+    const existing = await this.amenitiesRepository.findOneBy({ id });
+
+    if (!existing) {
+      throw new NotFoundException(`Amenity with ID ${id} not found`);
+    }
+
+    return existing;
+  }
+
+  async updateById(id: number, dto: UpdateAmenityDto): Promise<Amenities> {
+    const existing = await this.getById(id);
+
+    return await this.amenitiesRepository.save({
+      id: existing.id,
+      ...existing,
+      ...dto,
+    });
   }
 
   async remove(id: number): Promise<void> {

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { Amenities } from 'src/entities/amenities.entity';
 import { CreateAmenityDto } from './dto/create-amenity.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { amenitiesSeedData } from 'src/lib/activities';
+import { UpdateAmenityDto } from './dto/update-amenity.dto';
 
 @Controller('amenities')
 export class AmenitiesController {
@@ -37,7 +39,13 @@ export class AmenitiesController {
     return await this.amenitiesService.load(amenitiesSeedData);
   }
 
-  // @Patch amenity by id
+  @Patch(':id')
+  async updateById(
+    @Param('id') id: number,
+    @Body() dto: UpdateAmenityDto
+  ): Promise<Amenities> {
+    return await this.amenitiesService.updateById(id, dto);
+  }
 
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {

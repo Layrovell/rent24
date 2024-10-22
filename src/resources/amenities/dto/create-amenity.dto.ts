@@ -8,6 +8,10 @@ export class CreateAmenityDto {
 
   @ApiProperty()
   @IsOptional()
+  description: string;
+
+  @ApiProperty()
+  @IsOptional()
   @IsString()
   unit?: string;
 
