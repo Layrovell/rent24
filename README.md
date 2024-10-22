@@ -74,6 +74,28 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## Migrations
+
+**generate**
+npm run migration:g [path]
+The command creates a migration file after changes related to database entities, such as changing tables or adding/deleting a new one.
+
+[path] - ./migrations/your-migration-name
+
+**create**
+npm run migration:create [path]
+The command creates a migration file.
+
+[path] - ./migrations/your-migration-name
+
+**run**
+npm run migration:run
+Executing migration files to change the DB
+
+**revert**
+npm run migration:revert
+Cancels the last migration. If you need to undo multiple migrations, run the command multiple times
+
 ## Role Definitions
 
 #### Guest:
