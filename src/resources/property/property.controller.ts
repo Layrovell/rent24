@@ -49,8 +49,12 @@ export class PropertyController {
   }
 
   @Get(':id/details')
-  async getPropertyDetails(@Param('id') id: number): Promise<any> {
-    return await this.propertyService.getPropertyDetails(id);
+  async getPropertyDetails(
+    @Param('id') id: number
+  ): Promise<ViewPropertyDetailsDto> {
+    const details = await this.propertyService.getPropertyDetails(id);
+
+    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(details);
   }
 
   @Get(':id/amenities')

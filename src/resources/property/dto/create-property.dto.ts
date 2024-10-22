@@ -1,22 +1,30 @@
-import { IsNotEmpty, IsOptional, IsEnum, IsNumber } from 'class-validator';
+import {
+  IsOptional,
+  IsEnum,
+  IsNumber,
+  IsString,
+  IsBoolean,
+  IsNotEmpty,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { PropertyType } from 'src/entities/property.entity';
 
 export class CreatePropertyDto {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsString()
   title: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsString()
   description: string;
 
-  @IsNotEmpty()
+  @ApiProperty()
+  @IsString()
   city: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsString()
   country: string;
 
   @ApiProperty()
@@ -34,8 +42,10 @@ export class CreatePropertyDto {
   pricePerDay?: number;
 
   @ApiProperty()
+  @IsBoolean()
   longTerm: boolean;
 
+  @ApiProperty()
   @IsNotEmpty() // Ensure userId is provided
   @IsNumber()
   userId: number; // Include userId

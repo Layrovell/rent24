@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString, ValidateIf } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePropertyAmenityDto {
@@ -7,8 +7,9 @@ export class CreatePropertyAmenityDto {
   code: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @ValidateIf(
+    (o) => typeof o.value === 'boolean' || typeof o.value === 'number'
+  )
   value: number | boolean; // Can be a number or a boolean based on the amenity
-
-  @ApiProperty({ default: '' })
-  description: string;
 }
