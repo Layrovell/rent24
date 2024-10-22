@@ -67,7 +67,7 @@ export class User {
 
   @OneToOne(() => Profile, (profile) => profile.user, { onDelete: 'RESTRICT' })
   //  In a one-to-one relationship, the side that owns the relationship gets the @JoinColumn()
-  @JoinColumn({ name: 'profileId' })
+  @JoinColumn({ name: 'userProfileId' })
   profile: Profile; // Each user has one profile created at registration
 
   // @Column({ nullable: true })
