@@ -1,26 +1,30 @@
-import { IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-
-import { WallType } from 'src/entities';
 
 export class CreatePropertyDetailsDto {
   @ApiProperty()
-  wallType: WallType;
+  @IsNumber()
+  wallTypeId: number;
 
   @ApiProperty()
+  @IsNumber()
   yearBuilt: number;
 
   @ApiProperty()
+  @IsNumber()
   squareFootage: number;
 
   @ApiProperty()
   @IsOptional()
+  @IsString()
   energyEfficiencyRating?: string;
 
   @ApiProperty()
+  @IsNumber()
   floor: number;
 
   @ApiProperty()
+  @IsNumber()
   totalFloors: number;
 
   @IsOptional()

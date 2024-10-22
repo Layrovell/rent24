@@ -19,7 +19,7 @@ export class PropertyDetailsHelperProvider {
     const viewPropertyDetailsDto = new ViewPropertyDetailsDto();
 
     viewPropertyDetailsDto.id = detail.id;
-    viewPropertyDetailsDto.wallType = detail.wallType;
+    viewPropertyDetailsDto.wallTypeId = detail.wallType.id;
     viewPropertyDetailsDto.yearBuilt = detail.yearBuilt;
     viewPropertyDetailsDto.squareFootage = detail.squareFootage;
     viewPropertyDetailsDto.energyEfficiencyRating =

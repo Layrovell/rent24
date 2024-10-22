@@ -55,7 +55,13 @@ async function bootstrap() {
     @IsString()
     password: string;
   */
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    })
+  );
   app.setGlobalPrefix(apiVersion);
 
   app.enableCors({

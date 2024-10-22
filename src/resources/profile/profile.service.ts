@@ -60,6 +60,7 @@ export class ProfileService {
 
     return await this.profileRepository.save({
       id: existingUserProfile.id,
+      ...existingUserProfile,
       ...dto,
     });
   }

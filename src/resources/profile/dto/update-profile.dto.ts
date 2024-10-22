@@ -1,18 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 
-export class UpdateUserProfileDto {
-  @ApiProperty()
-  description: string;
+import { CreateProfileDto } from './create-profile.dto';
 
-  @ApiProperty()
-  companyName: null | string;
-
-  @ApiProperty()
-  commissionRate: null | number;
-
-  @ApiProperty()
-  fixedFee: null | number;
-
-  @ApiProperty()
-  isLookingForApartment: boolean;
-}
+export class UpdateUserProfileDto extends PartialType(
+  OmitType(CreateProfileDto, ['userId'])
+) {}

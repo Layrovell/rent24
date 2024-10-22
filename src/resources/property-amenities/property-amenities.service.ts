@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { PropertyAmenities } from 'src/entities/property-amenities.entity';
@@ -42,12 +42,16 @@ export class PropertyAmenitiesService {
         },
       });
 
-      // If property with the same amenity already exists, return null; otherwise, create a new one
       if (existingAmenity) {
-        console.log(
-          `Amenity ${amenity.code} already exists for property ${propertyId}. Skipping...`
+        throw new BadRequestException(
+          `Amenity ${amenity.code} already exists for property ${propertyId}`
         );
-        return null; // Skip the existing amenity
+      }
+
+      if (amenity.value === undefined || amenity.value === null) {
+        throw new BadRequestException(
+          `Amenity ${amenity.code} for property ${propertyId} has an invalid value`
+        );
       }
 
       return this.propertyAmenitiesRepository.create({

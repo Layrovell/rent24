@@ -17,7 +17,6 @@ export class PropertyAmenitiesHelperProvider {
     viewDto.id = amenity.id;
     viewDto.value = amenity.value;
     viewDto.code = amenity.amenity.code;
-    viewDto.description = amenity.amenity.description;
     viewDto.unit = amenity.amenity.unit;
     viewDto.valueType = amenity.amenity.valueType;
     viewDto.propertyId = amenity.property.id;

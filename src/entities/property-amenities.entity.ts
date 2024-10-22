@@ -14,7 +14,9 @@ export class PropertyAmenities {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Property, (property) => property.amenities)
+  @ManyToOne(() => Property, (property) => property.amenities, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'propertyId' })
   property: Property;
 

@@ -20,8 +20,13 @@ export class PropertyDetailsService {
   ) {}
 
   async getById(detailsId: number): Promise<PropertyDetails> {
-    const existingDetails = await this.propertyDetailsRepository.findOneBy({
-      id: detailsId,
+    const existingDetails = await this.propertyDetailsRepository.findOne({
+      where: {
+        id: detailsId,
+      },
+      relations: {
+        wallType: true,
+      },
     });
 
     if (!existingDetails) {
@@ -35,11 +40,7 @@ export class PropertyDetailsService {
     property: Property,
     dto: CreatePropertyDetailsDto
   ): Promise<any> {
-    const { wallType } = dto; // wallType code
-
-    const existingWallType = await this.wallTypeService.getByCode(
-      wallType as any
-    );
+    const existingWallType = await this.wallTypeService.getById(dto.wallTypeId);
 
     const existingDetails = await this.propertyDetailsRepository.findOneBy({
       propertyId: property.id,
@@ -53,7 +54,7 @@ export class PropertyDetailsService {
 
     const details = await this.propertyDetailsRepository.save({
       ...dto,
-      wallType: existingWallType,
+      wallTypeId: existingWallType.id,
       property: property,
     });
 
@@ -66,17 +67,13 @@ export class PropertyDetailsService {
   ): Promise<PropertyDetails> {
     const existingDetails = await this.getById(detailsId);
 
-    const { wallType } = dto; // wallType code
-
-    const existingWallType = await this.wallTypeService.getByCode(
-      wallType as any
-    );
+    const existingWallType = await this.wallTypeService.getById(dto.wallTypeId);
 
     return await this.propertyDetailsRepository.save({
       id: existingDetails.id,
       ...existingDetails,
       ...dto,
-      wallType: existingWallType,
+      wallTypeId: existingWallType.id,
     });
   }
 
