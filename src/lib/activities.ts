@@ -164,3 +164,132 @@ export const wallTypesSeedData = [
   { code: 'brick', description: 'Constructed with bricks...' },
   { code: 'concrete', description: 'Built with concrete...' },
 ];
+
+export const amenitiesSeedData = [
+  {
+    code: 'pool',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'parking',
+    description: 'The owner allow pets',
+    unit: 'slots',
+    valueType: 'number',
+  },
+  {
+    code: 'gym_distance',
+    description: 'The owner allow pets',
+    unit: 'meters',
+    valueType: 'number',
+  },
+  {
+    code: 'backyard',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'wifi',
+    description: 'The owner allow pets',
+    unit: 'Mbps',
+    valueType: 'number',
+  },
+  {
+    code: 'air_conditioning',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'heating',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'laundry',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'string',
+  },
+  {
+    code: 'dishwasher',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'balcony_area',
+    description: 'The owner allow pets',
+    unit: 'sqm',
+    valueType: 'number',
+  },
+  {
+    code: 'furnished',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'pets_allowed',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'children_allowed',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'elevator',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'security_system',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'fireplace',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'number_of_bedrooms',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'number',
+  },
+  {
+    code: 'number_of_bathrooms',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'number',
+  },
+  {
+    code: 'backyard',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'basement',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+  {
+    code: 'garage',
+    description: 'The owner allow pets',
+    unit: null,
+    valueType: 'boolean',
+  },
+];

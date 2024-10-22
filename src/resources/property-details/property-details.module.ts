@@ -4,10 +4,12 @@ import { DatabaseModule } from 'src/database/database.module';
 import { PropertyDetailsService } from './property-details.service';
 import { WallTypeModule } from '../wall-type/wall-type.module';
 import { PropertyDetailsHelperProvider } from './property-details-helper.provider';
+import { PropertyDetailsController } from './property-details.controller';
 
 @Module({
   imports: [DatabaseModule, WallTypeModule],
   providers: [PropertyDetailsService, PropertyDetailsHelperProvider],
   exports: [PropertyDetailsService, PropertyDetailsHelperProvider],
+  controllers: [PropertyDetailsController],
 })
 export class PropertyDetailsModule {}

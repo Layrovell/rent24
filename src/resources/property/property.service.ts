@@ -14,6 +14,9 @@ import { Property, PropertyDetails } from 'src/entities';
 import { PropertyDetailsService } from '../property-details/property-details.service';
 import { CreatePropertyDetailsDto } from '../property-details/dto/create-property-details.dto';
 import { UpdatePropertyDetailsDto } from '../property-details/dto/update-property-details.dto';
+import { PropertyAmenities } from 'src/entities/property-amenities.entity';
+import { PropertyAmenitiesService } from '../property-amenities/property-amenities.service';
+import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
 
 @Injectable()
 export class PropertyService {
@@ -23,7 +26,8 @@ export class PropertyService {
     @Inject(Property)
     private readonly propertyRepository: Repository<Property>,
     private readonly userService: UsersService,
-    private readonly propertyDetailsService: PropertyDetailsService
+    private readonly propertyDetailsService: PropertyDetailsService,
+    private readonly propertyAmenitiesService: PropertyAmenitiesService
   ) {}
 
   async getPropertyById(propertyId: number): Promise<Property> {
@@ -119,6 +123,7 @@ export class PropertyService {
   async getPropertyDetails(propertyId: number): Promise<PropertyDetails> {
     const existingProperty = await this.getPropertyById(propertyId);
 
+    // check & refactor
     if (!existingProperty.detailsId) {
       throw new NotFoundException(
         `No details found for property with ID ${propertyId}`
@@ -170,6 +175,33 @@ export class PropertyService {
 
     return this.propertyDetailsService.updateById(
       existingProperty.detailsId,
+      dto
+    );
+  }
+
+  async getAmenities(propertyId: number): Promise<PropertyAmenities[]> {
+    const existingProperty = await this.getPropertyById(propertyId);
+
+    return this.propertyAmenitiesService.getByPropertyId(existingProperty.id);
+  }
+
+  async addAmenities(
+    propertyId: number,
+    dto: CreatePropertyAmenityDto[],
+    userId: number
+  ) {
+    console.log('dto:', dto);
+
+    const existingProperty = await this.getPropertyById(propertyId);
+
+    if (userId !== existingProperty.user.id) {
+      throw new UnauthorizedException(
+        `You can not add details to property with ID ${propertyId}`
+      );
+    }
+
+    return await this.propertyAmenitiesService.addByPropertyId(
+      existingProperty.id,
       dto
     );
   }

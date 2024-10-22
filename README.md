@@ -74,6 +74,28 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
+## Migrations
+
+**generate**
+npm run migration:g [path]
+The command creates a migration file after changes related to database entities, such as changing tables or adding/deleting a new one.
+
+[path] - ./migrations/your-migration-name
+
+**create**
+npm run migration:create [path]
+The command creates a migration file.
+
+[path] - ./migrations/your-migration-name
+
+**run**
+npm run migration:run
+Executing migration files to change the DB
+
+**revert**
+npm run migration:revert
+Cancels the last migration. If you need to undo multiple migrations, run the command multiple times
+
 ## Role Definitions
 
 #### Guest:
@@ -119,12 +141,13 @@ Check out a few resources that may come in handy when working with NestJS:
 1. Users are not able to update/delete data that don't belong them (properties, profiles, etc). They are restricted from actions that not related to them.
 2. Some or users actions are tracked such as registration, updating the profile or post the property to make a history of user actions.
 3. Base 'user' allowa to create 5 peoperties at most. To create more they should have an 'agent' role. 
+4. Users can delete their profile but also able to recover it in a specific amount of time. If acoount won't be recovered it delete permanently.
 
 ## TODO
 
-1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc). *(done)*
-2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc). <br/> *(in process)*
-3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities.
+1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc). **(done)**
+2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc). <br/> **(done)**
+3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities. **(in process)**
 4. Subscribtions system, that alow user to act as an agent.
 5. Email recover and change using email module.
 6. Run over app security (xss, cookie, cors policies).
