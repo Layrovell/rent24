@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Param,
@@ -30,25 +29,13 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  @Patch(':id/password')
+  @Patch(':userId/password')
   @UseGuards(JwtAuthGuard, SameUserGuard)
-  // SameUserGuard: checks if id param same as id from the token
+  // SameUserGuard: checks if userId param same as id from the token
   updatePassword(
-    @Param('id') id: number,
+    @Param('userId') userId: number,
     @Body() dto: UpdateUserPasswordDto
   ): Promise<boolean> {
-    // TODO: Add reusable validator for invalid props
-    const valiFields = ['oldPassword', 'password'];
-    const bodyKeys = Object.keys(dto);
-
-    const invalidProps = bodyKeys.filter((key) => !valiFields.includes(key));
-
-    if (invalidProps.length > 0) {
-      throw new BadRequestException(
-        `Invalid fields: ${invalidProps.join(', ')}`
-      );
-    }
-
-    return this.authService.updatePassword(id, dto);
+    return this.authService.updatePassword(userId, dto);
   }
 }

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { IsNull, Not, Repository } from 'typeorm';
 
-import { User } from 'src/entities';
+import { User, UserProfile } from 'src/entities';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
@@ -19,6 +19,14 @@ export class UsersService {
     private readonly activityLogService: ActivityLogService, // Inject the activity log service
     private readonly securityService: SecurityService
   ) {}
+
+  async updateUserProfile(userId: number, userProfile: UserProfile) {
+    const user = await this.getUserById(userId);
+
+    user.profile = userProfile;
+
+    return this.userRepository.save(user);
+  }
 
   async getUserById(userId: number): Promise<User> {
     const user = await this.userRepository.findOneBy({ id: userId });
@@ -46,39 +54,6 @@ export class UsersService {
     }
 
     return await this.userRepository.save(dto);
-
-    // Start a transaction
-    // return await this.userRepository.manager.transaction(
-    //   async (entityManager: EntityManager) => {
-    //     try {
-    //       const createdUser = entityManager.create(User, dto);
-    //       console.log('createdUser:', JSON.stringify(createdUser, null, 4));
-
-    //       const savedUser = await entityManager.save(createdUser);
-    //       console.log('savedUser:', JSON.stringify(savedUser, null, 4));
-
-    //       // Create the blank profile
-    //       const createProfileDto: CreateProfileDto = new CreateProfileDto();
-
-    //       const blankProfile = entityManager.create(Profile, {
-    //         ...createProfileDto,
-    //         user: savedUser, // Associate the profile with the user
-    //       });
-
-    //       await entityManager.save(blankProfile);
-
-    //       savedUser.profile = blankProfile;
-
-    //       // Save the user again to establish the relationship
-    //       return await entityManager.save(savedUser);
-    //     } catch (error) {
-    //       console.error('transaction error:', error);
-    //       throw new InternalServerErrorException(
-    //         'Unable to register user. Please try again later'
-    //       );
-    //     }
-    //   }
-    // );
   }
 
   async getAllUsers() {

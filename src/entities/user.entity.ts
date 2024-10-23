@@ -15,6 +15,7 @@ import { ActivityLog } from './activity-log.entity';
 import { UserProfile } from './profile.entity';
 import { Property } from './property.entity';
 import { Favorites } from './favorites.entity';
+import { AgentProfile } from './agent-profile.entity';
 
 export enum Role {
   GUEST = 'guest',
@@ -72,8 +73,11 @@ export class User {
   @JoinColumn({ name: 'userProfileId' })
   profile: UserProfile; // Each user has one profile created at registration
 
-  // @Column({ nullable: true })
-  // profileId: number;
+  @OneToOne(() => AgentProfile, (profile) => profile.user, {
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'agentProfileId' })
+  agentProfile: AgentProfile;
 
   @OneToMany(() => ActivityLog, (log) => log.user, { onDelete: 'CASCADE' })
   activityLogs: ActivityLog[];

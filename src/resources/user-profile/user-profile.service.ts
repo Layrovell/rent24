@@ -1,43 +1,69 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 
-import { User } from 'src/entities';
 import { UserProfile } from 'src/entities/profile.entity';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
-import { ActivityCode } from 'src/lib/activities';
 import { ActivityLogService } from '../activity-log/activity-log.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class UserProfileService {
   constructor(
     @Inject(UserProfile)
     private userProfileRepository: Repository<UserProfile>,
-    private readonly activityLogService: ActivityLogService
+    private readonly activityLogService: ActivityLogService,
+    private readonly userService: UsersService
   ) {}
 
-  async createBlankProfile(user: User): Promise<UserProfile> {
-    const createProfileDto: CreateUserProfileDto = new CreateUserProfileDto();
-
-    const blankProfile = this.userProfileRepository.create({
-      ...createProfileDto,
-      user, // Associate the profile with the user
+  async createUserProfile(
+    userId: number,
+    dto: CreateUserProfileDto
+  ): Promise<UserProfile> {
+    const existingUserProfile = await this.userProfileRepository.findOne({
+      where: { user: { id: userId } },
     });
 
-    //  throw Error(`Hi, I'm error`)
-    return await this.userProfileRepository.save(blankProfile);
+    if (existingUserProfile) {
+      throw new BadRequestException(
+        `Profile for user ID ${userId} already exists`
+      );
+    }
+
+    const user = await this.userService.getUserById(userId);
+
+    const profile = this.userProfileRepository.create({
+      ...dto,
+      user,
+    });
+
+    const savedProfile = await this.userProfileRepository.save(profile);
+
+    await this.userService.updateUserProfile(userId, savedProfile);
+
+    return savedProfile;
   }
 
-  async getProfileByUser(user: User): Promise<UserProfile> {
+  async getProfileByUserId(userId: number): Promise<UserProfile> {
     const existingUserProfile = await this.userProfileRepository.findOne({
       where: {
-        user: { id: user.id },
+        user: {
+          id: userId,
+        },
+      },
+      relations: {
+        user: true,
       },
     });
 
     if (!existingUserProfile) {
       throw new NotFoundException(
-        `Profile for user with the ID ${user.id} not found`
+        `Profile for user with the ID ${userId} not found`
       );
     }
 
@@ -45,18 +71,10 @@ export class UserProfileService {
   }
 
   async updateProfileByUser(
-    user: User,
+    userId: number,
     dto: UpdateUserProfileDto
   ): Promise<UserProfile> {
-    // TODO: Is it good for getting the Profile pass the user instead of injecting userService?
-    const existingUserProfile = await this.getProfileByUser(user);
-
-    if (dto.description) {
-      await this.activityLogService.createActivityLog({
-        user: user,
-        activityCode: ActivityCode.PROFILE_UPDATE,
-      });
-    }
+    const existingUserProfile = await this.getProfileByUserId(userId);
 
     return await this.userProfileRepository.save({
       id: existingUserProfile.id,

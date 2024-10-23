@@ -5,17 +5,20 @@ export class ViewUserProfileDto {
   id: number;
 
   @ApiProperty()
+  title: string;
+
+  @ApiProperty()
   description: string;
 
   @ApiProperty()
-  companyName: null | string;
-
-  @ApiProperty()
-  commissionRate: null | number;
-
-  @ApiProperty()
-  fixedFee: null | number;
-
-  @ApiProperty()
   isLookingForApartment: boolean;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
+
+  @ApiProperty()
+  userId: number;
 }
