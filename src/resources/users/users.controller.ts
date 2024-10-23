@@ -18,9 +18,9 @@ import { SameUserGuard } from 'src/guards/same-user.guard';
 import { ViewUserDto } from './dto/view-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { ViewActivityLogDto } from '../activity-log/dto/view-activity-log.dto';
-import { ProfileService } from '../profile/profile.service';
-import { ViewUserProfileDto } from '../profile/dto/view-profile.dto';
-import { UpdateUserProfileDto } from '../profile/dto/update-profile.dto';
+import { UserProfileService } from '../user-profile/user-profile.service';
+import { ViewUserProfileDto } from '../user-profile/dto/view-user-profile.dto';
+import { UpdateUserProfileDto } from '../user-profile/dto/update-user-profile.dto';
 import { Favorites } from 'src/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 
@@ -31,7 +31,7 @@ export class UsersController {
     private readonly userService: UsersService,
     private readonly userHelperProvider: UserHelperProvider,
     private readonly activityLogService: ActivityLogService,
-    private readonly profileService: ProfileService,
+    private readonly userProfileService: UserProfileService,
     private readonly favoritesService: FavoritesService
   ) {}
 
@@ -58,7 +58,7 @@ export class UsersController {
   ): Promise<ViewUserProfileDto> {
     const user = await this.userService.getUserById(userId);
 
-    return await this.profileService.getProfileByUser(user);
+    return await this.userProfileService.getProfileByUser(user);
   }
 
   @Get(':id/activity-logs')
@@ -89,7 +89,7 @@ export class UsersController {
   ): Promise<any> {
     const user = await this.userService.getUserById(userId);
 
-    return await this.profileService.updateProfileByUser(user, dto);
+    return await this.userProfileService.updateProfileByUser(user, dto);
   }
 
   @Patch(':id/favorites/:propertyId')

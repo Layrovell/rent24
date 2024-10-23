@@ -12,7 +12,7 @@ import {
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 import { ActivityLog } from './activity-log.entity';
-import { Profile } from './profile.entity';
+import { UserProfile } from './profile.entity';
 import { Property } from './property.entity';
 import { Favorites } from './favorites.entity';
 
@@ -65,10 +65,12 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastSignIn: Date;
 
-  @OneToOne(() => Profile, (profile) => profile.user, { onDelete: 'RESTRICT' })
+  @OneToOne(() => UserProfile, (profile) => profile.user, {
+    onDelete: 'RESTRICT',
+  })
   //  In a one-to-one relationship, the side that owns the relationship gets the @JoinColumn()
   @JoinColumn({ name: 'userProfileId' })
-  profile: Profile; // Each user has one profile created at registration
+  profile: UserProfile; // Each user has one profile created at registration
 
   // @Column({ nullable: true })
   // profileId: number;

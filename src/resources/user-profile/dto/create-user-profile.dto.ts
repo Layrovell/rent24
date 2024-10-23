@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateProfileDto {
+export class CreateUserProfileDto {
   @ApiProperty()
   @IsString()
   @IsOptional()

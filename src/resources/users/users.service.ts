@@ -3,15 +3,13 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  InternalServerErrorException,
 } from '@nestjs/common';
-import { EntityManager, IsNull, Not, Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
-import { Profile, User } from 'src/entities';
+import { User } from 'src/entities';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
-import { CreateProfileDto } from '../profile/dto/create-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -47,38 +45,40 @@ export class UsersService {
       throw new BadRequestException(`Email ${dto.email} is already in use`);
     }
 
+    return await this.userRepository.save(dto);
+
     // Start a transaction
-    return await this.userRepository.manager.transaction(
-      async (entityManager: EntityManager) => {
-        try {
-          const createdUser = entityManager.create(User, dto);
-          console.log('createdUser:', JSON.stringify(createdUser, null, 4));
+    // return await this.userRepository.manager.transaction(
+    //   async (entityManager: EntityManager) => {
+    //     try {
+    //       const createdUser = entityManager.create(User, dto);
+    //       console.log('createdUser:', JSON.stringify(createdUser, null, 4));
 
-          const savedUser = await entityManager.save(createdUser);
-          console.log('savedUser:', JSON.stringify(savedUser, null, 4));
+    //       const savedUser = await entityManager.save(createdUser);
+    //       console.log('savedUser:', JSON.stringify(savedUser, null, 4));
 
-          // Create the blank profile
-          const createProfileDto: CreateProfileDto = new CreateProfileDto();
+    //       // Create the blank profile
+    //       const createProfileDto: CreateProfileDto = new CreateProfileDto();
 
-          const blankProfile = entityManager.create(Profile, {
-            ...createProfileDto,
-            user: savedUser, // Associate the profile with the user
-          });
+    //       const blankProfile = entityManager.create(Profile, {
+    //         ...createProfileDto,
+    //         user: savedUser, // Associate the profile with the user
+    //       });
 
-          await entityManager.save(blankProfile);
+    //       await entityManager.save(blankProfile);
 
-          savedUser.profile = blankProfile;
+    //       savedUser.profile = blankProfile;
 
-          // Save the user again to establish the relationship
-          return await entityManager.save(savedUser);
-        } catch (error) {
-          console.error('transaction error:', error);
-          throw new InternalServerErrorException(
-            'Unable to register user. Please try again later'
-          );
-        }
-      }
-    );
+    //       // Save the user again to establish the relationship
+    //       return await entityManager.save(savedUser);
+    //     } catch (error) {
+    //       console.error('transaction error:', error);
+    //       throw new InternalServerErrorException(
+    //         'Unable to register user. Please try again later'
+    //       );
+    //     }
+    //   }
+    // );
   }
 
   async getAllUsers() {
