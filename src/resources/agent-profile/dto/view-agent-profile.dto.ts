@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateUserProfileDto } from './create-user-profile.dto';
 
-export class ViewUserProfileDto extends CreateUserProfileDto {
+import { CreateAgentProfileDto } from './create-agent-profile.dto';
+
+export class ViewAgentProfileDto extends CreateAgentProfileDto {
   @ApiProperty()
   id: number;
 

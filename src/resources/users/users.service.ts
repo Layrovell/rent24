@@ -10,6 +10,7 @@ import { User, UserProfile } from 'src/entities';
 import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
+import { AgentProfile } from 'src/entities/agent-profile.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +24,15 @@ export class UsersService {
   async updateUserProfile(userId: number, userProfile: UserProfile) {
     const user = await this.getUserById(userId);
 
-    user.profile = userProfile;
+    user.userProfile = userProfile;
+
+    return this.userRepository.save(user);
+  }
+
+  async updateAgentProfile(userId: number, agentProfile: AgentProfile) {
+    const user = await this.getUserById(userId);
+
+    user.agentProfile = agentProfile;
 
     return this.userRepository.save(user);
   }
@@ -59,7 +68,7 @@ export class UsersService {
   async getAllUsers() {
     const users = await this.userRepository.find({
       relations: {
-        profile: true,
+        userProfile: true,
       },
     });
 

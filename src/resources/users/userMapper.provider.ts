@@ -20,7 +20,7 @@ export class UserHelperProvider {
     viewUserDto.role = user.role;
     viewUserDto.createdAt = user.createdAt;
     viewUserDto.updatedAt = user.updatedAt;
-    viewUserDto.profile = user.profile;
+    viewUserDto.userProfile = user.userProfile;
 
     return viewUserDto;
   }

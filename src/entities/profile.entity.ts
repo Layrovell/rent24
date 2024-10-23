@@ -24,7 +24,7 @@ export class UserProfile {
   @Column({ default: false })
   isLookingForApartment: boolean; // Can be used to display a badge on the profile
 
-  @OneToOne(() => User, (user) => user.profile, {
+  @OneToOne(() => User, (user) => user.userProfile, {
     cascade: true,
     onDelete: 'CASCADE',
   })

@@ -38,7 +38,7 @@ export class UserProfileController {
   async createUserProfile(
     @Param('userId') userId: number,
     @Body() dto: CreateUserProfileDto
-  ): Promise<any> {
+  ): Promise<ViewUserProfileDto> {
     const profile = await this.userProfileService.createUserProfile(
       userId,
       dto
@@ -52,7 +52,7 @@ export class UserProfileController {
   async updateUserProfile(
     @Param('userId') userId: number,
     @Body() dto: UpdateUserProfileDto
-  ): Promise<any> {
+  ): Promise<ViewUserProfileDto> {
     const profile = await this.userProfileService.updateProfileByUser(
       userId,
       dto
