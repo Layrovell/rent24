@@ -8,18 +8,29 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+// import NodeCache from 'node-cache';
+import * as NodeCache from 'node-cache';
 
 import { UsersService } from 'src/resources/users/users.service';
 import { SecurityService } from 'src/security/security.service';
 import { User } from 'src/entities/user.entity';
-import { LoginDto, LoginResponseDto, RegisterDto } from './dto/auth.dto';
+import {
+  ChangeEmailDto,
+  LoginDto,
+  LoginResponseDto,
+  RegisterDto,
+} from './dto/auth.dto';
 import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
 import { ActivityLogService } from 'src/resources/activity-log/activity-log.service';
 import { ActivityCode } from 'src/lib/activities';
 import { UpdateUserPasswordDto } from 'src/resources/users/dto/update-user-password.dto';
+import { EmailService } from 'src/resources/email/email.service';
 
 @Injectable()
 export class AuthService {
+  private readonly cache: NodeCache;
+  private readonly CODE_EXPIRATION = 3600; // Code expiration in seconds (1 hour)
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly securityService: SecurityService,
@@ -27,8 +38,11 @@ export class AuthService {
     private readonly config: ConfigService,
     @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
-    private readonly userHelperProvider: UserHelperProvider
-  ) {}
+    private readonly userHelperProvider: UserHelperProvider,
+    private readonly emailService: EmailService
+  ) {
+    this.cache = new NodeCache({ stdTTL: this.CODE_EXPIRATION }); // Initialize cache with TTL (Time To Live)
+  }
 
   async login(dto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.validateUser(dto);
@@ -127,5 +141,52 @@ export class AuthService {
     });
 
     return !!updatedUser;
+  }
+
+  async requestVerificationCode(
+    userId: number,
+    dto: ChangeEmailDto
+  ): Promise<void> {
+    const user = await this.userService.getUserById(userId);
+
+    const existingEmail = await this.userService.getUserByEmail(dto.newEmail);
+
+    if (existingEmail) {
+      throw new BadRequestException(`Email ${dto.newEmail} already in use`);
+    }
+
+    const verificationCode = this.securityService.generateVerificationCode();
+
+    this.cache.set(`verification:${user.id}`, {
+      newEmail: dto.newEmail,
+      verificationCode,
+    });
+
+    await this.emailService.sendVerificationEmail(
+      dto.newEmail,
+      verificationCode
+    );
+  }
+
+  async verifyAndChangeEmail(
+    userId: number,
+    verificationCode: number
+  ): Promise<void> {
+    const user = await this.userService.getUserById(userId);
+
+    const cacheData = this.cache.get<{
+      newEmail: string;
+      verificationCode: string;
+    }>(`verification:${user.id}`);
+
+    // Check if verification code and new email exist in the cache
+    if (!cacheData || +cacheData.verificationCode !== verificationCode) {
+      throw new BadRequestException('Invalid or expired verification code');
+    }
+
+    await this.userService.updateEmail(userId, cacheData.newEmail);
+
+    // Remove cache data after successful verification
+    this.cache.del(`verification:${userId}`);
   }
 }

@@ -9,7 +9,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { ChangeEmailDto, LoginDto, RegisterDto } from './dto/auth.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SameUserGuard } from 'src/guards/same-user.guard';
 import { UpdateUserPasswordDto } from 'src/resources/users/dto/update-user-password.dto';
@@ -27,6 +27,28 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  @Post(':userId/request-verification-code')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async sendEmail(
+    @Param('userId') userId: number,
+    @Body() dto: ChangeEmailDto
+  ): Promise<{ message: string }> {
+    await this.authService.requestVerificationCode(userId, dto);
+
+    return { message: 'Verification email sent' };
+  }
+
+  @Post(':userId/change-email')
+  @UseGuards(JwtAuthGuard, SameUserGuard)
+  async changeEmail(
+    @Param('userId') userId: number,
+    @Body('verificationCode') verificationCode: number
+  ): Promise<{ message: string }> {
+    await this.authService.verifyAndChangeEmail(userId, verificationCode);
+
+    return { message: 'Email updated successfully' };
   }
 
   @Patch(':userId/password')

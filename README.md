@@ -147,9 +147,9 @@ Check out a few resources that may come in handy when working with NestJS:
 
 1. Property Details table (to store specific data related to property details info such as number of floors, wall type, years buit, square footage, etc). **(done)**
 2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc). <br/> **(done)**
-3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities. **(in process)**
+3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities. **(done)**
 4. Subscribtions system, that alow user to act as an agent.
-5. Email recover and change using email module.
+5. Email recover and change using email module. **(in process)**
 6. Run over app security (xss, cookie, cors policies).
 7. Add moderation stage to property posting. Ex. the one can be posted but with some flag 'isModerated' and after property is moderated it will displayed with other as well.
 8. Tests set up and coverage.
