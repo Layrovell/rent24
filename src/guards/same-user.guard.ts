@@ -10,7 +10,7 @@ export class SameUserGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const userIdFromToken = request.user.id; // Assuming user 'id' is stored in JWT token
-    const paramId = request.params.id; // Get the 'id' param from request
+    const paramId = request.params.userId; // Get the 'id' param from request
 
     if (userIdFromToken !== +paramId) {
       // If token user 'id' doesn't match the request user 'id', throw an error

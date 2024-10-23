@@ -7,7 +7,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './resources/users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ActivityLogModule } from './resources/activity-log/activity-log.module';
-import { ProfileModule } from './resources/profile/profile.module';
+import { UserProfileModule } from './resources/user-profile/user-profile.module';
 import configuration from './config/configuration';
 import { TasksModule } from './resources/tasks/tasks.module';
 import { PropertyModule } from './resources/property/property.module';
@@ -17,6 +17,7 @@ import { PropertyDetailsModule } from './resources/property-details/property-det
 import { WallTypeModule } from './resources/wall-type/wall-type.module';
 import { AmenitiesModule } from './resources/amenities/amenities.module';
 import { PropertyAmenitiesModule } from './resources/property-amenities/property-amenities.module';
+import { AgentProfileModule } from './resources/agent-profile/agent-profile.module';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { PropertyAmenitiesModule } from './resources/property-amenities/property
     UsersModule,
     AuthModule,
     ActivityLogModule,
-    ProfileModule,
+    UserProfileModule,
     PropertyModule,
     FavoritesModule,
     ActivitiesModule,
@@ -39,6 +40,7 @@ import { PropertyAmenitiesModule } from './resources/property-amenities/property
     WallTypeModule,
     AmenitiesModule,
     PropertyAmenitiesModule,
+    AgentProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
