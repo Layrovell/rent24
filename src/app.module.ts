@@ -18,6 +18,7 @@ import { WallTypeModule } from './resources/wall-type/wall-type.module';
 import { AmenitiesModule } from './resources/amenities/amenities.module';
 import { PropertyAmenitiesModule } from './resources/property-amenities/property-amenities.module';
 import { AgentProfileModule } from './resources/agent-profile/agent-profile.module';
+import { EmailModule } from './resources/email/email.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { AgentProfileModule } from './resources/agent-profile/agent-profile.modu
     AmenitiesModule,
     PropertyAmenitiesModule,
     AgentProfileModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

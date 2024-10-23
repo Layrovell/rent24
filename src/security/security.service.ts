@@ -12,4 +12,8 @@ export class SecurityService {
   async compareData(password: string, hash: string): Promise<boolean> {
     return await bcrypt.compare(password, hash);
   }
+
+  generateVerificationCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
 }

@@ -4,9 +4,9 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { Role } from 'src/entities/user.entity';
 
 export class RegisterDto {
+  @ApiProperty()
   @IsEmail({}, { message: 'Must be a valid email address' })
   @IsNotEmpty({ message: 'Email should not be empty' })
-  @ApiProperty()
   email: string;
 
   @MinLength(6, { message: 'Password cannot be less then 6 characters' })
@@ -38,6 +38,12 @@ export class LoginDto {
   @IsString()
   @ApiProperty()
   password: string;
+}
+
+export class ChangeEmailDto {
+  @ApiProperty()
+  @IsEmail({}, { message: 'Must be a valid email address' })
+  newEmail: string;
 }
 
 export class LoginResponseDto {

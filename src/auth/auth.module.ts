@@ -9,6 +9,7 @@ import { UsersModule } from 'src/resources/users/users.module';
 import { SecurityModule } from 'src/security/security.module';
 import { JwtStrategy } from 'src/strategies/jwtStrategy';
 import { ActivityLogModule } from 'src/resources/activity-log/activity-log.module';
+import { EmailModule } from 'src/resources/email/email.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ActivityLogModule } from 'src/resources/activity-log/activity-log.modul
       signOptions: { expiresIn: '2h' },
     }),
     ActivityLogModule,
+    EmailModule,
   ],
   // JWT strategy extracts and attaches the user to the req
   providers: [AuthService, JwtStrategy],
