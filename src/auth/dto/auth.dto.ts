@@ -50,3 +50,25 @@ export class LoginResponseDto {
   refreshToken: string;
   accessToken: string;
 }
+
+export class RecoverEmailDto {
+  @ApiProperty()
+  @IsString()
+  firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  lastName: string;
+
+  @ApiProperty()
+  @IsString()
+  password: string;
+
+  @ApiProperty()
+  @IsString()
+  oldEmail: string;
+
+  @ApiProperty()
+  @IsEmail()
+  newEmail: string;
+}
