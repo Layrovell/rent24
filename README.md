@@ -12,19 +12,22 @@
   </p>
 
   <p align="center">
-  <a href="https://www.typescriptlang.org/" target="_blank">
-    <img src="https://img.shields.io/badge/typescript-v4.5.2-3178c6?logo=typescript&logoColor=3178c6" alt="TypeScript Badge" />
+  <a href="https://www.typescriptlang.org/" target="_blank" style="text-decoration: none">
+    <img src="https://img.shields.io/badge/typescript-v4.8.2-3178c6?logo=typescript&logoColor=3178c6" alt="TypeScript Badge" />
   </a>
-  <a href="https://nestjs.com" target="_blank">
-    <img src="https://img.shields.io/badge/nestjs-v8.0.0-E0234E?logo=nestjs&logoColor=E0234E" alt="NestJS Badge" />
+  <a href="https://nestjs.com" target="_blank" style="text-decoration: none">
+    <img src="https://img.shields.io/badge/nestjs-v10.0.0-E0234E?logo=nestjs&logoColor=E0234E" alt="NestJS Badge" />
   </a>
-  <a href="https://nodejs.org/" target="_blank">
+  <a href="https://nodejs.org/" target="_blank" style="text-decoration: none">
     <img src="https://img.shields.io/badge/node.js-^20.3.1-339933?logo=node.js&logoColor=339933" alt="Node.js Badge" />
   </a>
   <img src="https://img.shields.io/badge/coverage-0%25-brightgreen" alt="Coverage Badge" />
   </a>
-  <a href="https://www.npmjs.com" target="_blank">
-    <img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" />
+  <a href="https://www.typescriptlang.org/" target="_blank" style="text-decoration: none">
+    <img src="https://img.shields.io/badge/pnpm-v9.12.1-F69220?logo=pnpm&logoColor=F69220" alt="TypeScript Badge" />
+  </a>
+  <a href="https://pnpm.io" target="_blank" style="text-decoration: none">
+    <img src="https://img.shields.io/badge/SendGrid-F22F46?logo=twilio&logoColor=white" alt="SendGrid" />
   </a>
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
@@ -140,7 +143,7 @@ Check out a few resources that may come in handy when working with NestJS:
 
 1. Users are not able to update/delete data that don't belong them (properties, profiles, etc). They are restricted from actions that not related to them.
 2. Some or users actions are tracked such as registration, updating the profile or post the property to make a history of user actions.
-3. Base 'user' allowa to create 5 peoperties at most. To create more they should have an 'agent' role. 
+3. Base 'user' allowa to create 5 peoperties at most. To create more they should have an 'agent' role.
 4. Users can delete their profile but also able to recover it in a specific amount of time. If acoount won't be recovered it delete permanently.
 
 ## TODO
@@ -149,8 +152,8 @@ Check out a few resources that may come in handy when working with NestJS:
 2. Property Amenities table (to store specific data related to amenities such as security system, fireplace, elevator, furnished etc). <br/> **(done)**
 3. Devide Profile into 'UserProfile' and 'AgentProfile' to easy active or deactivate agent abilities. **(done)**
 4. Subscribtions system, that alow user to act as an agent.
-5. Email recover and change using email module. **(in process)**
-6. Run over app security (xss, cookie, cors policies).
+5. Email recover and change using email module. **(done)**
+6. Run over app security (xss, cookie, cors policies). **(in process)**
 7. Add moderation stage to property posting. Ex. the one can be posted but with some flag 'isModerated' and after property is moderated it will displayed with other as well.
 8. Tests set up and coverage.
 9. Add user sessions to be logged in in different devices and track it allowing to delete a muddy (suspicious) session.
