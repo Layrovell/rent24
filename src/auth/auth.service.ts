@@ -18,6 +18,7 @@ import {
   ChangeEmailDto,
   LoginDto,
   LoginResponseDto,
+  RecoverEmailDto,
   RegisterDto,
 } from './dto/auth.dto';
 import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
@@ -145,7 +146,8 @@ export class AuthService {
 
   async requestVerificationCode(
     userId: number,
-    dto: ChangeEmailDto
+    dto: ChangeEmailDto,
+    cachePrefix: string
   ): Promise<void> {
     const user = await this.userService.getUserById(userId);
 
@@ -157,7 +159,7 @@ export class AuthService {
 
     const verificationCode = this.securityService.generateVerificationCode();
 
-    this.cache.set(`verification:${user.id}`, {
+    this.cache.set(`${cachePrefix}:${user.id}`, {
       newEmail: dto.newEmail,
       verificationCode,
     });
@@ -170,14 +172,15 @@ export class AuthService {
 
   async verifyAndChangeEmail(
     userId: number,
-    verificationCode: number
+    verificationCode: number,
+    cachePrefix: string
   ): Promise<void> {
     const user = await this.userService.getUserById(userId);
 
     const cacheData = this.cache.get<{
       newEmail: string;
       verificationCode: string;
-    }>(`verification:${user.id}`);
+    }>(`${cachePrefix}:${user.id}`);
 
     // Check if verification code and new email exist in the cache
     if (!cacheData || +cacheData.verificationCode !== verificationCode) {
@@ -187,6 +190,66 @@ export class AuthService {
     await this.userService.updateEmail(userId, cacheData.newEmail);
 
     // Remove cache data after successful verification
-    this.cache.del(`verification:${userId}`);
+    this.cache.del(`${cachePrefix}:${userId}`);
+  }
+
+  async requestEmailRecover(
+    userId: number,
+    dto: RecoverEmailDto,
+    cachePrefix: string
+  ): Promise<any> {
+    const user = await this.userService.getUserById(userId);
+
+    // Validate user details
+    this.validateUserDetails(user, dto);
+
+    const isValidPassword = await this.securityService.compareData(
+      dto.password,
+      user.hashedPassword
+    );
+
+    if (!isValidPassword) {
+      throw new UnauthorizedException('Wrong password');
+    }
+
+    const existingEmail = await this.userService.getUserByEmail(dto.newEmail);
+
+    if (existingEmail) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const verificationCode = this.securityService.generateVerificationCode();
+
+    this.cache.set(`${cachePrefix}:${user.id}`, {
+      newEmail: dto.newEmail,
+      verificationCode,
+    });
+
+    await this.emailService.sendVerificationEmail(
+      dto.newEmail,
+      verificationCode
+    );
+  }
+
+  // Helper method for validation
+  private validateUserDetails(user: User, dto: RecoverEmailDto): void {
+    const errors = [];
+
+    if (user.firstName !== dto.firstName) {
+      errors.push('Wrong first name');
+    }
+    if (user.lastName !== dto.lastName) {
+      errors.push('Wrong last name');
+    }
+    if (user.email !== dto.oldEmail) {
+      errors.push('Wrong old email');
+    }
+    if (dto.newEmail === user.email) {
+      errors.push('Previously used email');
+    }
+
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
   }
 }
