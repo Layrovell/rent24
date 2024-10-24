@@ -80,7 +80,7 @@ export class AuthController {
     );
 
     // processing...
-    return { message: 'All data is correct. Verification email sent' };
+    return { message: 'Recovery email sent' };
   }
 
   @Post(':userId/recover-email')
