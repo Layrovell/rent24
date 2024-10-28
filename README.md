@@ -12,23 +12,34 @@
   </p>
 
   <p align="center">
-  <a href="https://www.typescriptlang.org/" target="_blank" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/typescript-v4.8.2-3178c6?logo=typescript&logoColor=3178c6" alt="TypeScript Badge" />
-  </a>
-  <a href="https://nestjs.com" target="_blank" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/nestjs-v10.0.0-E0234E?logo=nestjs&logoColor=E0234E" alt="NestJS Badge" />
-  </a>
-  <a href="https://nodejs.org/" target="_blank" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/node.js-^20.3.1-339933?logo=node.js&logoColor=339933" alt="Node.js Badge" />
-  </a>
-  <img src="https://img.shields.io/badge/coverage-0%25-brightgreen" alt="Coverage Badge" />
-  <a href="https://www.typescriptlang.org/" target="_blank" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/pnpm-v9.12.1-F69220?logo=pnpm&logoColor=F69220" alt="TypeScript Badge" />
-  </a>
-  <a href="https://sendgrid.com/" target="_blank" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/SendGrid-F22F46?logo=twilio&logoColor=white" alt="SendGrid" />
-  </a>
-</p>
+    <span>
+      <a href="https://www.typescriptlang.org" target="_blank" style="text-decoration: none">
+        <img src="https://img.shields.io/badge/typescript-v4.8.2-3178c6?logo=typescript&logoColor=3178c6" alt="TypeScript Badge" />
+      </a>
+    </span>
+    <span>
+      <a href="https://nestjs.com" target="_blank" style="text-decoration: none">
+        <img src="https://img.shields.io/badge/nestjs-v10.0.0-E0234E?logo=nestjs&logoColor=E0234E" alt="NestJS Badge" />
+      </a>
+    </span>
+    <span>
+      <a href="https://nodejs.org" target="_blank" style="text-decoration: none">
+        <img src="https://img.shields.io/badge/node.js-^20.3.1-339933?logo=node.js&logoColor=339933" alt="Node.js Badge" />
+      </a>
+    </span>
+    <br />
+    <img src="https://img.shields.io/badge/coverage-0%25-brightgreen" alt="Coverage Badge" />
+    <span>
+      <a href="https://pnpm.io" target="_blank" style="text-decoration: none">
+        <img src="https://img.shields.io/badge/pnpm-v9.12.1-F69220?logo=pnpm&logoColor=F69220" alt="TypeScript Badge" />
+      </a>
+    </span>
+    <span>
+      <a href="https://sendgrid.com" target="_blank" style="text-decoration: none">
+        <img src="https://img.shields.io/badge/SendGrid-F22F46?logo=twilio&logoColor=white" alt="SendGrid" />
+      </a>
+    </span>
+  </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
