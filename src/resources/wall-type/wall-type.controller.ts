@@ -1,11 +1,12 @@
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { WallType } from 'src/entities';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { WallTypeService } from './wall-type.service';
 import { wallTypesSeedData } from 'src/lib/activities';
 
+@ApiTags('wall-type')
 @Controller('wall-type')
 export class WallTypeController {
   constructor(private readonly wallTypeService: WallTypeService) {}

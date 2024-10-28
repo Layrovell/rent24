@@ -15,6 +15,7 @@ const url = `${protocol}://${host}:${port}/${apiVersion}`;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // Set security-related HTTP headers
   app.use(helmet());
   // https://wanago.io/2024/02/12/api-nestjs-helmet-security/
 
@@ -70,6 +71,7 @@ async function bootstrap() {
       transform: true,
     })
   );
+
   app.setGlobalPrefix(apiVersion);
 
   app.enableCors({
@@ -106,7 +108,10 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('auth')
     .addTag('users')
-    .addTag('favorites')
+    .addTag('user-profile')
+    .addTag('agent-profile')
+    .addTag('amenities')
+    .addTag('wall-type')
     .addTag('activity-logs')
     .addTag('properties')
     .addTag('activities')

@@ -7,6 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SameUserGuard } from 'src/guards/same-user.guard';
@@ -16,6 +17,7 @@ import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { ViewUserProfileDto } from './dto/view-user-profile.dto';
 import { UserProfileHelperProvider } from './user-profile-helper.provider';
 
+@ApiTags('user-profile')
 @Controller('users/:userId/user-profile')
 export class UserProfileController {
   constructor(

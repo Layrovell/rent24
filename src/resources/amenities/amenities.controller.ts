@@ -8,7 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { AmenitiesService } from './amenities.service';
 import { Amenities } from 'src/entities/amenities.entity';
@@ -17,6 +17,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { amenitiesSeedData } from 'src/lib/activities';
 import { UpdateAmenityDto } from './dto/update-amenity.dto';
 
+@ApiTags('amenities')
 @Controller('amenities')
 export class AmenitiesController {
   constructor(private readonly amenitiesService: AmenitiesService) {}
