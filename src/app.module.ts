@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 
@@ -19,6 +19,7 @@ import { AmenitiesModule } from './resources/amenities/amenities.module';
 import { PropertyAmenitiesModule } from './resources/property-amenities/property-amenities.module';
 import { AgentProfileModule } from './resources/agent-profile/agent-profile.module';
 import { EmailModule } from './resources/email/email.module';
+import { SanitizeMiddleware } from './middlewares/sanitize.middleware';
 
 @Module({
   imports: [
@@ -47,4 +48,8 @@ import { EmailModule } from './resources/email/email.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(SanitizeMiddleware).forRoutes('*'); // Apply to all routes
+  }
+}
