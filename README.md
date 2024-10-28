@@ -22,11 +22,10 @@
     <img src="https://img.shields.io/badge/node.js-^20.3.1-339933?logo=node.js&logoColor=339933" alt="Node.js Badge" />
   </a>
   <img src="https://img.shields.io/badge/coverage-0%25-brightgreen" alt="Coverage Badge" />
-  </a>
   <a href="https://www.typescriptlang.org/" target="_blank" style="text-decoration: none">
     <img src="https://img.shields.io/badge/pnpm-v9.12.1-F69220?logo=pnpm&logoColor=F69220" alt="TypeScript Badge" />
   </a>
-  <a href="https://pnpm.io" target="_blank" style="text-decoration: none">
+  <a href="https://sendgrid.com/" target="_blank" style="text-decoration: none">
     <img src="https://img.shields.io/badge/SendGrid-F22F46?logo=twilio&logoColor=white" alt="SendGrid" />
   </a>
 </p>
