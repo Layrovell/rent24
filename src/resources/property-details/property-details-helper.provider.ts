@@ -5,35 +5,30 @@ import { ViewPropertyDetailsDto } from './dto/view-property-details.dto';
 
 @Injectable()
 export class PropertyDetailsHelperProvider {
-  propertiesDetailsToViewDto(
-    details: PropertyDetails[]
-  ): ViewPropertyDetailsDto[] {
-    const viewPropertiesListDto = details.map((detail) =>
-      this.propertyDetailsToViewDto(detail)
-    );
+  listToViewDto(details: PropertyDetails[]): ViewPropertyDetailsDto[] {
+    const viewListDto = details.map((detail) => this.toViewDto(detail));
 
-    return viewPropertiesListDto;
+    return viewListDto;
   }
 
-  propertyDetailsToViewDto(detail: PropertyDetails): ViewPropertyDetailsDto {
-    const viewPropertyDetailsDto = new ViewPropertyDetailsDto();
+  toViewDto(detail: PropertyDetails): ViewPropertyDetailsDto {
+    const viewDto = new ViewPropertyDetailsDto();
 
-    viewPropertyDetailsDto.id = detail.id;
-    viewPropertyDetailsDto.wallTypeId = detail.wallType.id;
-    viewPropertyDetailsDto.yearBuilt = detail.yearBuilt;
-    viewPropertyDetailsDto.squareFootage = detail.squareFootage;
-    viewPropertyDetailsDto.energyEfficiencyRating =
-      detail.energyEfficiencyRating;
-    viewPropertyDetailsDto.floor = detail.floor;
-    viewPropertyDetailsDto.totalFloors = detail.totalFloors;
-    viewPropertyDetailsDto.availableFrom = detail.availableFrom;
-    viewPropertyDetailsDto.availableTo = detail.availableTo;
-    viewPropertyDetailsDto.maxResidents = detail.maxResidents;
-    viewPropertyDetailsDto.propertyId = detail.propertyId;
+    viewDto.id = detail.id;
+    viewDto.wallTypeId = detail.wallType.id;
+    viewDto.yearBuilt = detail.yearBuilt;
+    viewDto.squareFootage = detail.squareFootage;
+    viewDto.energyEfficiencyRating = detail.energyEfficiencyRating;
+    viewDto.floor = detail.floor;
+    viewDto.totalFloors = detail.totalFloors;
+    viewDto.availableFrom = detail.availableFrom;
+    viewDto.availableTo = detail.availableTo;
+    viewDto.maxResidents = detail.maxResidents;
+    viewDto.propertyId = detail.propertyId;
 
-    viewPropertyDetailsDto.createdAt = detail.createdAt;
-    viewPropertyDetailsDto.updatedAt = detail.updatedAt;
+    viewDto.createdAt = detail.createdAt;
+    viewDto.updatedAt = detail.updatedAt;
 
-    return viewPropertyDetailsDto;
+    return viewDto;
   }
 }

@@ -6,7 +6,7 @@ import { DatabaseModule } from 'src/database/database.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { SecurityModule } from 'src/security/security.module';
 import { ActivityLogModule } from '../activity-log/activity-log.module';
-import { UserHelperProvider } from './userMapper.provider';
+import { UserHelperProvider } from './user-helper.provider';
 import { FavoritesModule } from '../favorites/favorites.module';
 
 @Module({
