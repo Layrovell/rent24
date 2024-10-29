@@ -6,9 +6,9 @@ import { ViewAgentProfileDto } from './dto/view-agent-profile.dto';
 @Injectable()
 export class AgentProfileHelperProvider {
   listToViewDto(profiles: AgentProfile[]): ViewAgentProfileDto[] {
-    const viewUserListDto = profiles.map((profile) => this.toViewDto(profile));
+    const viewListDto = profiles.map((profile) => this.toViewDto(profile));
 
-    return viewUserListDto;
+    return viewListDto;
   }
 
   toViewDto(profile: AgentProfile): ViewAgentProfileDto {

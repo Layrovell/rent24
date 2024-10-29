@@ -5,23 +5,21 @@ import { ViewActivityLogDto } from './dto/view-activity-log.dto';
 
 @Injectable()
 export class ActivityLogHelperProvider {
-  activitiesToViewDto(activities: ActivityLog[]): ViewActivityLogDto[] {
-    const viewPropertiesListDto = activities.map((activity) =>
-      this.activityToViewDto(activity)
-    );
+  listToViewDto(activities: ActivityLog[]): ViewActivityLogDto[] {
+    const viewListDto = activities.map((activity) => this.toViewDto(activity));
 
-    return viewPropertiesListDto;
+    return viewListDto;
   }
 
-  activityToViewDto(activity: ActivityLog): ViewActivityLogDto {
-    const viewActivityDto = new ViewActivityLogDto();
+  toViewDto(activity: ActivityLog): ViewActivityLogDto {
+    const viewDto = new ViewActivityLogDto();
 
-    viewActivityDto.id = activity.id;
-    viewActivityDto.code = activity.activity.code;
-    viewActivityDto.description = activity.activity.description;
-    viewActivityDto.createdAt = activity.createdAt;
-    viewActivityDto.userId = activity.user.id;
+    viewDto.id = activity.id;
+    viewDto.code = activity.activity.code;
+    viewDto.description = activity.activity.description;
+    viewDto.createdAt = activity.createdAt;
+    viewDto.userId = activity.user.id;
 
-    return viewActivityDto;
+    return viewDto;
   }
 }

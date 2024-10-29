@@ -21,7 +21,7 @@ import {
   RecoverEmailDto,
   RegisterDto,
 } from './dto/auth.dto';
-import { UserHelperProvider } from 'src/resources/users/userMapper.provider';
+import { UserHelperProvider } from 'src/resources/users/user-helper.provider';
 import { ActivityLogService } from 'src/resources/activity-log/activity-log.service';
 import { ActivityCode } from 'src/lib/activities';
 import { UpdateUserPasswordDto } from 'src/resources/users/dto/update-user-password.dto';
@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   async generateTokenPair(user: User): Promise<LoginResponseDto> {
-    const userView = this.userHelperProvider.userToViewDto(user);
+    const userView = this.userHelperProvider.toViewDto(user);
 
     const payload = { sub: user.id, user: userView };
 

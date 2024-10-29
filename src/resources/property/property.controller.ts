@@ -40,13 +40,13 @@ export class PropertyController {
   @Get('')
   async getAll(): Promise<ViewPropertyDto[]> {
     const properties = await this.propertyService.getAll();
-    return this.propertyHelperProvider.propertiesToViewDto(properties);
+    return this.propertyHelperProvider.listToViewDto(properties);
   }
 
   @Get(':id')
   async getById(@Param('id') propertyId: number): Promise<ViewPropertyDto> {
     const property = await this.propertyService.getPropertyById(propertyId);
-    return this.propertyHelperProvider.propertyToViewDto(property);
+    return this.propertyHelperProvider.toViewDto(property);
   }
 
   @Get(':id/details')
@@ -55,7 +55,7 @@ export class PropertyController {
   ): Promise<ViewPropertyDetailsDto> {
     const details = await this.propertyService.getPropertyDetails(id);
 
-    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(details);
+    return this.propertyDetailsHelperProvider.toViewDto(details);
   }
 
   @Get(':id/amenities')
@@ -74,7 +74,7 @@ export class PropertyController {
   ): Promise<ViewPropertyDto> {
     const property = await this.propertyService.createProperty(dto);
 
-    return this.propertyHelperProvider.propertyToViewDto(property);
+    return this.propertyHelperProvider.toViewDto(property);
   }
 
   @Post(':id/details')
@@ -92,7 +92,7 @@ export class PropertyController {
       currentUserId
     );
 
-    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(details);
+    return this.propertyDetailsHelperProvider.toViewDto(details);
   }
 
   @Post(':id/amenities')
@@ -150,9 +150,7 @@ export class PropertyController {
       currentUserId
     );
 
-    return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(
-      updatedDetails
-    );
+    return this.propertyDetailsHelperProvider.toViewDto(updatedDetails);
   }
 
   @Patch(':id/on-moderating')
@@ -163,7 +161,7 @@ export class PropertyController {
   ): Promise<ViewPropertyDto> {
     const property = await this.propertyService.moderate(id, dto);
 
-    return this.propertyHelperProvider.propertyToViewDto(property);
+    return this.propertyHelperProvider.toViewDto(property);
   }
 
   @Delete(':id')

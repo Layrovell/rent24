@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { UserHelperProvider } from './userMapper.provider';
+import { UserHelperProvider } from './user-helper.provider';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SameUserGuard } from 'src/guards/same-user.guard';
@@ -35,7 +35,7 @@ export class UsersController {
   async getAllUsers(): Promise<ViewUserDto[]> {
     const users = await this.userService.getAllUsers();
 
-    return this.userHelperProvider.userListToViewDto(users);
+    return this.userHelperProvider.listToViewDto(users);
   }
 
   @Get(':userId')
@@ -43,7 +43,7 @@ export class UsersController {
   async getUserById(@Param('userId') userId: number): Promise<ViewUserDto> {
     const user = await this.userService.getUserById(userId);
 
-    return this.userHelperProvider.userToViewDto(user);
+    return this.userHelperProvider.toViewDto(user);
   }
 
   @Get(':userId/activity-logs')

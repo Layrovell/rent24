@@ -57,6 +57,6 @@ export class ActivityLogService {
       order: { createdAt: 'DESC' }, // Order by most recent activity
     });
 
-    return this.activityLogHelperProvider.activitiesToViewDto(data);
+    return this.activityLogHelperProvider.listToViewDto(data);
   }
 }

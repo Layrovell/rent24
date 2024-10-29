@@ -5,36 +5,34 @@ import { Property } from 'src/entities';
 
 @Injectable()
 export class PropertyHelperProvider {
-  propertiesToViewDto(properties: Property[]): ViewPropertyDto[] {
-    const viewPropertiesListDto = properties.map((property) =>
-      this.propertyToViewDto(property)
-    );
+  listToViewDto(properties: Property[]): ViewPropertyDto[] {
+    const viewListDto = properties.map((property) => this.toViewDto(property));
 
-    return viewPropertiesListDto;
+    return viewListDto;
   }
 
-  propertyToViewDto(property: Property): ViewPropertyDto {
-    const viewPropertyDto = new ViewPropertyDto();
+  toViewDto(property: Property): ViewPropertyDto {
+    const viewDto = new ViewPropertyDto();
 
-    viewPropertyDto.id = property.id;
-    viewPropertyDto.title = property.title;
-    viewPropertyDto.description = property.description;
-    viewPropertyDto.city = property.city;
-    viewPropertyDto.country = property.country;
-    viewPropertyDto.longTerm = property.longTerm;
-    viewPropertyDto.pricePerDay = property.pricePerDay;
-    viewPropertyDto.pricePerMonth = property.pricePerMonth;
-    viewPropertyDto.propertyType = property.propertyType;
+    viewDto.id = property.id;
+    viewDto.title = property.title;
+    viewDto.description = property.description;
+    viewDto.city = property.city;
+    viewDto.country = property.country;
+    viewDto.longTerm = property.longTerm;
+    viewDto.pricePerDay = property.pricePerDay;
+    viewDto.pricePerMonth = property.pricePerMonth;
+    viewDto.propertyType = property.propertyType;
     // or return the full user not just the ID?
     // viewPropertyDto.user = property.user;
-    viewPropertyDto.userId = property.user.id;
-    viewPropertyDto.detailsId = property.detailsId; // since details.id can be null
+    viewDto.userId = property.user.id;
+    viewDto.detailsId = property.detailsId; // since details.id can be null
 
-    viewPropertyDto.createdAt = property.createdAt;
-    viewPropertyDto.updatedAt = property.updatedAt;
+    viewDto.createdAt = property.createdAt;
+    viewDto.updatedAt = property.updatedAt;
 
-    viewPropertyDto.isModerated = property.isModerated;
+    viewDto.isModerated = property.isModerated;
 
-    return viewPropertyDto;
+    return viewDto;
   }
 }

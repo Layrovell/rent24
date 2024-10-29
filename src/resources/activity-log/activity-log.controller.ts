@@ -17,6 +17,6 @@ export class ActivityLogController {
   async getAll(): Promise<ViewActivityLogDto[]> {
     const data = await this.activityLogService.getAll();
 
-    return this.activityLogHelperProvider.activitiesToViewDto(data);
+    return this.activityLogHelperProvider.listToViewDto(data);
   }
 }
