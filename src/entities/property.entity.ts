@@ -84,4 +84,7 @@ export class Property {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isModerated: boolean;
 }

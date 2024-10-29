@@ -17,6 +17,7 @@ import { UpdatePropertyDetailsDto } from '../property-details/dto/update-propert
 import { PropertyAmenities } from 'src/entities/property-amenities.entity';
 import { PropertyAmenitiesService } from '../property-amenities/property-amenities.service';
 import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
+import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-status.dto';
 
 @Injectable()
 export class PropertyService {
@@ -113,6 +114,9 @@ export class PropertyService {
 
   async getAll(): Promise<Property[]> {
     return await this.propertyRepository.find({
+      where: {
+        isModerated: true,
+      },
       relations: {
         user: true,
         details: true,
@@ -204,5 +208,18 @@ export class PropertyService {
       existingProperty.id,
       dto
     );
+  }
+
+  async moderate(
+    propertyId: number,
+    dto: UpdatePropertyModerationStatusDto
+  ): Promise<Property> {
+    const property = await this.getPropertyById(propertyId);
+
+    return await this.propertyRepository.save({
+      id: property.id,
+      ...property,
+      ...dto,
+    });
   }
 }

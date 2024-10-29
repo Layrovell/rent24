@@ -45,4 +45,7 @@ export class ViewPropertyDto {
 
   @ApiProperty()
   detailsId: number;
+
+  @ApiProperty()
+  isModerated: boolean;
 }

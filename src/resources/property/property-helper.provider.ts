@@ -33,6 +33,8 @@ export class PropertyHelperProvider {
     viewPropertyDto.createdAt = property.createdAt;
     viewPropertyDto.updatedAt = property.updatedAt;
 
+    viewPropertyDto.isModerated = property.isModerated;
+
     return viewPropertyDto;
   }
 }

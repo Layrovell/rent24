@@ -25,6 +25,7 @@ import { UpdatePropertyDetailsDto } from '../property-details/dto/update-propert
 import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
 import { PropertyAmenitiesHelperProvider } from '../property-amenities/property-amenities-helper.provider';
 import { ViewPropertyAmenitiesDto } from '../property-amenities/dto/view-property-amenities.dto';
+import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-status.dto';
 
 @ApiTags('properties')
 @Controller('properties')
@@ -152,6 +153,17 @@ export class PropertyController {
     return this.propertyDetailsHelperProvider.propertyDetailsToViewDto(
       updatedDetails
     );
+  }
+
+  @Patch(':id/on-moderating')
+  @UseGuards(JwtAuthGuard) // TODO: ideally only for 'admin' role. Requires refactoring roles enum to table
+  async setModeratedStatus(
+    @Param('id') id: number,
+    @Body() dto: UpdatePropertyModerationStatusDto
+  ): Promise<ViewPropertyDto> {
+    const property = await this.propertyService.moderate(id, dto);
+
+    return this.propertyHelperProvider.propertyToViewDto(property);
   }
 
   @Delete(':id')
