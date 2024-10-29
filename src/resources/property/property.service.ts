@@ -11,9 +11,6 @@ import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UsersService } from '../users/users.service';
 import { Property, PropertyDetails } from 'src/entities';
-import { PropertyAmenities } from 'src/entities/property-amenities.entity';
-import { PropertyAmenitiesService } from '../property-amenities/property-amenities.service';
-import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
 import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-status.dto';
 
 @Injectable()
@@ -23,8 +20,7 @@ export class PropertyService {
   constructor(
     @Inject(Property)
     private readonly propertyRepository: Repository<Property>,
-    private readonly userService: UsersService,
-    private readonly propertyAmenitiesService: PropertyAmenitiesService
+    private readonly userService: UsersService
   ) {}
 
   async getPropertyById(propertyId: number): Promise<Property> {
@@ -120,31 +116,6 @@ export class PropertyService {
     });
   }
 
-  async getAmenities(propertyId: number): Promise<PropertyAmenities[]> {
-    const existingProperty = await this.getPropertyById(propertyId);
-
-    return this.propertyAmenitiesService.getByPropertyId(existingProperty.id);
-  }
-
-  async addAmenities(
-    propertyId: number,
-    dto: CreatePropertyAmenityDto[],
-    userId: number
-  ) {
-    const existingProperty = await this.getPropertyById(propertyId);
-
-    if (userId !== existingProperty.user.id) {
-      throw new UnauthorizedException(
-        `You can not add details to property with ID ${propertyId}`
-      );
-    }
-
-    return await this.propertyAmenitiesService.addByPropertyId(
-      existingProperty.id,
-      dto
-    );
-  }
-
   async moderate(
     propertyId: number,
     dto: UpdatePropertyModerationStatusDto
@@ -156,5 +127,18 @@ export class PropertyService {
       ...property,
       ...dto,
     });
+  }
+
+  async getNotModetared(): Promise<Property[]> {
+    const properties = await this.propertyRepository.find({
+      where: {
+        isModerated: false,
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    return properties;
   }
 }

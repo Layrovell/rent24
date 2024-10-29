@@ -18,9 +18,6 @@ import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
-import { PropertyAmenitiesHelperProvider } from '../property-amenities/property-amenities-helper.provider';
-import { ViewPropertyAmenitiesDto } from '../property-amenities/dto/view-property-amenities.dto';
 import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-status.dto';
 
 @ApiTags('properties')
@@ -28,9 +25,7 @@ import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-statu
 export class PropertyController {
   constructor(
     private readonly propertyService: PropertyService,
-    private readonly propertyHelperProvider: PropertyHelperProvider,
-    // private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider,
-    private readonly propertyAmenitiesHelperProvider: PropertyAmenitiesHelperProvider
+    private readonly propertyHelperProvider: PropertyHelperProvider
   ) {}
 
   @Get('')
@@ -39,19 +34,17 @@ export class PropertyController {
     return this.propertyHelperProvider.listToViewDto(properties);
   }
 
+  @Get('on-moderation') // for 'admin' role ideally
+  async getNotModerated(): Promise<any> {
+    const properties = await this.propertyService.getNotModetared();
+
+    return this.propertyHelperProvider.listToViewDto(properties);
+  }
+
   @Get(':id')
   async getById(@Param('id') propertyId: number): Promise<ViewPropertyDto> {
     const property = await this.propertyService.getPropertyById(propertyId);
     return this.propertyHelperProvider.toViewDto(property);
-  }
-
-  @Get(':id/amenities')
-  async getPropertyAmenities(
-    @Param('id') id: number
-  ): Promise<ViewPropertyAmenitiesDto[]> {
-    const records = await this.propertyService.getAmenities(id);
-
-    return this.propertyAmenitiesHelperProvider.listToViewDto(records);
   }
 
   @Post('')
@@ -62,18 +55,6 @@ export class PropertyController {
     const property = await this.propertyService.createProperty(dto);
 
     return this.propertyHelperProvider.toViewDto(property);
-  }
-
-  @Post(':id/amenities')
-  @UseGuards(JwtAuthGuard)
-  async postAmenitiesByPropertyId(
-    @Param('id') id: number,
-    @Body() dto: CreatePropertyAmenityDto[],
-    @Req() request: any
-  ): Promise<void> {
-    const currentUserId = request.user.id;
-
-    return await this.propertyService.addAmenities(id, dto, currentUserId);
   }
 
   @Patch(':id')
@@ -104,6 +85,8 @@ export class PropertyController {
     );
   }
 
+  // TODO: should we get the entire property with all the info
+  // (relations, except user) or take ones from separate API endpoints?
   @Patch(':id/on-moderating')
   @UseGuards(JwtAuthGuard) // TODO: ideally only for 'admin' role. Requires refactoring roles enum to table
   async setModeratedStatus(
