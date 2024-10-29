@@ -18,10 +18,6 @@ import { PropertyService } from './property.service';
 import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { CreatePropertyDetailsDto } from '../property-details/dto/create-property-details.dto';
-import { ViewPropertyDetailsDto } from '../property-details/dto/view-property-details.dto';
-import { PropertyDetailsHelperProvider } from '../property-details/property-details-helper.provider';
-import { UpdatePropertyDetailsDto } from '../property-details/dto/update-property-details.dto';
 import { CreatePropertyAmenityDto } from '../property-amenities/dto/create-property-amenity.dto';
 import { PropertyAmenitiesHelperProvider } from '../property-amenities/property-amenities-helper.provider';
 import { ViewPropertyAmenitiesDto } from '../property-amenities/dto/view-property-amenities.dto';
@@ -33,7 +29,7 @@ export class PropertyController {
   constructor(
     private readonly propertyService: PropertyService,
     private readonly propertyHelperProvider: PropertyHelperProvider,
-    private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider,
+    // private readonly propertyDetailsHelperProvider: PropertyDetailsHelperProvider,
     private readonly propertyAmenitiesHelperProvider: PropertyAmenitiesHelperProvider
   ) {}
 
@@ -47,15 +43,6 @@ export class PropertyController {
   async getById(@Param('id') propertyId: number): Promise<ViewPropertyDto> {
     const property = await this.propertyService.getPropertyById(propertyId);
     return this.propertyHelperProvider.toViewDto(property);
-  }
-
-  @Get(':id/details')
-  async getPropertyDetails(
-    @Param('id') id: number
-  ): Promise<ViewPropertyDetailsDto> {
-    const details = await this.propertyService.getPropertyDetails(id);
-
-    return this.propertyDetailsHelperProvider.toViewDto(details);
   }
 
   @Get(':id/amenities')
@@ -75,24 +62,6 @@ export class PropertyController {
     const property = await this.propertyService.createProperty(dto);
 
     return this.propertyHelperProvider.toViewDto(property);
-  }
-
-  @Post(':id/details')
-  @UseGuards(JwtAuthGuard)
-  async postDetailsByPropertyId(
-    @Param('id') id: number,
-    @Body() dto: CreatePropertyDetailsDto,
-    @Req() request: any
-  ): Promise<ViewPropertyDetailsDto> {
-    const currentUserId = request.user.id;
-
-    const details = await this.propertyService.addDetailsToProperty(
-      id,
-      dto,
-      currentUserId
-    );
-
-    return this.propertyDetailsHelperProvider.toViewDto(details);
   }
 
   @Post(':id/amenities')
@@ -133,24 +102,6 @@ export class PropertyController {
       currentUserId,
       dto
     );
-  }
-
-  @Patch(':id/details')
-  @UseGuards(JwtAuthGuard)
-  async updatePropertyDetails(
-    @Param('id') id: number,
-    @Req() request: any,
-    @Body() dto: UpdatePropertyDetailsDto
-  ): Promise<ViewPropertyDetailsDto> {
-    const currentUserId = request.user.id;
-
-    const updatedDetails = await this.propertyService.updatePropertyDetails(
-      id,
-      dto,
-      currentUserId
-    );
-
-    return this.propertyDetailsHelperProvider.toViewDto(updatedDetails);
   }
 
   @Patch(':id/on-moderating')
