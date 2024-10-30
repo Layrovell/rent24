@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -75,6 +76,16 @@ export class UsersController {
     @Param('propertyId') propertyId: number
   ): Promise<void> {
     return this.favoritesService.toggleFavorite(userId, propertyId);
+  }
+
+  @Patch(':userId/role')
+  async updateRole(
+    @Param('userId') userId: number,
+    @Body() dto: { role: string }
+  ): Promise<ViewUserDto> {
+    const updatedUser = await this.userService.updateRole(userId, dto);
+
+    return this.userHelperProvider.toViewDto(updatedUser);
   }
 
   @Delete(':userId')

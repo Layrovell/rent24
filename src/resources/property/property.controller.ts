@@ -19,6 +19,9 @@ import { ViewPropertyDto } from './dto/view-property.dto';
 import { PropertyHelperProvider } from './property-helper.provider';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { UpdatePropertyModerationStatusDto } from './dto/update-moderation-status.dto';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role as UserRole } from 'src/entities/user.entity';
+import { RolesGuard } from 'src/guards/auth.guard';
 
 @ApiTags('properties')
 @Controller('properties')
@@ -35,6 +38,8 @@ export class PropertyController {
   }
 
   @Get('on-moderation') // for 'admin' role ideally
+  @Roles(UserRole.MODERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async getNotModerated(): Promise<any> {
     const properties = await this.propertyService.getNotModetared();
 
@@ -87,8 +92,9 @@ export class PropertyController {
 
   // TODO: should we get the entire property with all the info
   // (relations, except user) or take ones from separate API endpoints?
-  @Patch(':id/on-moderating')
-  @UseGuards(JwtAuthGuard) // TODO: ideally only for 'admin' role. Requires refactoring roles enum to table
+  @Patch(':id/on-moderation')
+  @Roles(UserRole.MODERATOR)
+  @UseGuards(JwtAuthGuard, RolesGuard) // TODO: ideally only for 'admin' role. Requires refactoring roles enum to table
   async setModeratedStatus(
     @Param('id') id: number,
     @Body() dto: UpdatePropertyModerationStatusDto

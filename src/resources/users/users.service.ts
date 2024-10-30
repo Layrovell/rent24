@@ -11,6 +11,7 @@ import { SecurityService } from 'src/security/security.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { AgentProfile } from 'src/entities/agent-profile.entity';
+import { Role } from 'src/entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -123,5 +124,22 @@ export class UsersService {
     console.log(`User ID ${userId} successfully recovered`);
 
     return existingUser; // Return the recovered user
+  }
+
+  async updateRole(userId: number, dto: { role: string }): Promise<User> {
+    const existing = await this.getUserById(userId);
+
+    const validRole = Object.values(Role).find((e) => e === dto.role);
+
+    if (!validRole) {
+      throw new NotFoundException(`Role ${dto.role} not found`);
+    }
+
+    const d = await this.userRepository.save({
+      ...existing,
+      role: validRole,
+    });
+
+    return d;
   }
 }

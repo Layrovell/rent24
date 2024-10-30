@@ -21,6 +21,8 @@ export enum Role {
   GUEST = 'guest',
   USER = 'user',
   AGENT = 'agent',
+  MODERATOR = 'moderator',
+  // ADMIN = 'admin' // not needed right now. TODO: separate table for Roles
 }
 
 @Entity('Users') // Specify the exact name of the table in the database
