@@ -48,6 +48,11 @@ export class AuthService {
   async login(dto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.validateUser(dto);
 
+    await this.activityLogService.createActivityLog({
+      userId: user.id,
+      activityCode: ActivityCode.LOGIN,
+    });
+
     return this.generateTokenPair(user);
   }
 
@@ -102,11 +107,6 @@ export class AuthService {
 
     const newUser = await this.userService.createUser(data);
 
-    await this.activityLogService.createActivityLog({
-      user: newUser,
-      activityCode: ActivityCode.REGISTRATION,
-    });
-
     const tokens = await this.generateTokenPair(newUser);
 
     return { ...tokens };
@@ -135,11 +135,6 @@ export class AuthService {
         hashedPassword: newHashedPassword,
       }
     );
-
-    await this.activityLogService.createActivityLog({
-      user: updatedUser,
-      activityCode: ActivityCode.PASSWORD_CHANGE,
-    });
 
     return !!updatedUser;
   }

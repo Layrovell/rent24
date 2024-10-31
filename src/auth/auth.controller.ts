@@ -37,8 +37,7 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  // prev: Post
-  @Patch(':userId/request-verification-code')
+  @Post(':userId/request-verification-code')
   @UseGuards(JwtAuthGuard, SameUserGuard)
   async sendEmail(
     @Param('userId') userId: number,

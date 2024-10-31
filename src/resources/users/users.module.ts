@@ -14,7 +14,7 @@ import { FavoritesModule } from '../favorites/favorites.module';
     DatabaseModule,
     forwardRef(() => AuthModule),
     SecurityModule,
-    ActivityLogModule,
+    forwardRef(() => ActivityLogModule),
     FavoritesModule,
   ],
   controllers: [UsersController],

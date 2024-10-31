@@ -1,11 +1,15 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { ActivityLog } from 'src/entities';
-import { User } from 'src/entities';
+import { UsersService } from '../users/users.service';
 import { ActivitiesService } from '../activities/activities.service';
-import { ActivityLogHelperProvider } from './activity-log-helper.provider';
-import { ViewActivityLogDto } from './dto/view-activity-log.dto';
+import { CreateActivityLogDto } from './dto/creae-activity-log.dto';
 
 @Injectable()
 export class ActivityLogService {
@@ -13,7 +17,8 @@ export class ActivityLogService {
     @Inject(ActivityLog)
     private readonly activityLogRepository: Repository<ActivityLog>,
     private readonly activitiesService: ActivitiesService, // Inject ActivityTypeService
-    private readonly activityLogHelperProvider: ActivityLogHelperProvider
+    @Inject(forwardRef(() => UsersService))
+    private readonly userService: UsersService
   ) {}
 
   async getAll(): Promise<ActivityLog[]> {
@@ -25,18 +30,14 @@ export class ActivityLogService {
     });
   }
 
-  async createActivityLog({
-    user,
-    activityCode,
-  }: {
-    user: User;
-    activityCode: string;
-  }) {
+  async createActivityLog({ userId, activityCode }: CreateActivityLogDto) {
     const activity = await this.activitiesService.findByCode(activityCode);
 
     if (!activity) {
       throw new BadRequestException(`Invalid activity type: ${activityCode}`);
     }
+
+    const user = await this.userService.getUserById(userId);
 
     const activityLog = this.activityLogRepository.create({
       user,
@@ -47,8 +48,10 @@ export class ActivityLogService {
   }
 
   // Fetch all activity logs for a user
-  async getActivityLogsByUserId(userId: number): Promise<ViewActivityLogDto[]> {
-    const data = await this.activityLogRepository.find({
+  async getActivityLogsByUserId(userId: number): Promise<ActivityLog[]> {
+    await this.userService.getUserById(userId);
+
+    return await this.activityLogRepository.find({
       where: { user: { id: userId } },
       relations: {
         activity: true,
@@ -56,7 +59,5 @@ export class ActivityLogService {
       },
       order: { createdAt: 'DESC' }, // Order by most recent activity
     });
-
-    return this.activityLogHelperProvider.listToViewDto(data);
   }
 }

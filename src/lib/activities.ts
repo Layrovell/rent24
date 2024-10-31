@@ -6,6 +6,7 @@ export enum ActivityCode {
   PASSWORD_CHANGE = 'password_change',
   PROFILE_UPDATE = 'profile_update',
   EMAIL_UPDATE = 'email_update',
+  // email recover
   PHONE_UPDATE = 'phone_update',
   ACCOUNT_DEACTIVATION = 'account_deactivation',
 

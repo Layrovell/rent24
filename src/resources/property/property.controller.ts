@@ -48,7 +48,7 @@ export class PropertyController {
 
   @Get(':id')
   async getById(@Param('id') propertyId: number): Promise<ViewPropertyDto> {
-    const property = await this.propertyService.getPropertyById(propertyId);
+    const property = await this.propertyService.viewProperty(propertyId);
     return this.propertyHelperProvider.toViewDto(property);
   }
 

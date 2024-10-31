@@ -16,8 +16,6 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SameUserGuard } from 'src/guards/same-user.guard';
 
 import { ViewUserDto } from './dto/view-user.dto';
-import { ActivityLogService } from '../activity-log/activity-log.service';
-import { ViewActivityLogDto } from '../activity-log/dto/view-activity-log.dto';
 import { Favorites } from 'src/entities/favorites.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 
@@ -27,7 +25,6 @@ export class UsersController {
   constructor(
     private readonly userService: UsersService,
     private readonly userHelperProvider: UserHelperProvider,
-    private readonly activityLogService: ActivityLogService,
     private readonly favoritesService: FavoritesService
   ) {}
 
@@ -45,14 +42,6 @@ export class UsersController {
     const user = await this.userService.getUserById(userId);
 
     return this.userHelperProvider.toViewDto(user);
-  }
-
-  @Get(':userId/activity-logs')
-  @UseGuards(JwtAuthGuard, SameUserGuard)
-  async getActivityLogs(
-    @Param('userId') userId: number
-  ): Promise<ViewActivityLogDto[]> {
-    return await this.activityLogService.getActivityLogsByUserId(userId);
   }
 
   @Get(':userId/favorites')

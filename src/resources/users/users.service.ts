@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ActivityLogService } from '../activity-log/activity-log.service';
 import { AgentProfile } from 'src/entities/agent-profile.entity';
 import { Role } from 'src/entities/user.entity';
+import { ActivityCode } from 'src/lib/activities';
 
 @Injectable()
 export class UsersService {
@@ -27,6 +28,11 @@ export class UsersService {
 
     user.userProfile = userProfile;
 
+    await this.activityLogService.createActivityLog({
+      userId: user.id,
+      activityCode: ActivityCode.PROFILE_UPDATE,
+    });
+
     return this.userRepository.save(user);
   }
 
@@ -35,6 +41,11 @@ export class UsersService {
 
     user.agentProfile = agentProfile;
 
+    // await this.activityLogService.createActivityLog({
+    //   userId: user.id,
+    //   activityCode: ActivityCode.AGENT_PROFILE_UPDATE,
+    // });
+
     return this.userRepository.save(user);
   }
 
@@ -42,6 +53,11 @@ export class UsersService {
     const user = await this.getUserById(userId);
 
     user.email = newEmail;
+
+    await this.activityLogService.createActivityLog({
+      userId: user.id,
+      activityCode: ActivityCode.EMAIL_UPDATE,
+    });
 
     return this.userRepository.save(user);
   }
@@ -71,7 +87,14 @@ export class UsersService {
       throw new BadRequestException(`Email ${dto.email} is already in use`);
     }
 
-    return await this.userRepository.save(dto);
+    const newUser = await this.userRepository.save(dto);
+
+    await this.activityLogService.createActivityLog({
+      userId: newUser.id,
+      activityCode: ActivityCode.REGISTRATION,
+    });
+
+    return newUser;
   }
 
   async getAllUsers() {
@@ -89,10 +112,17 @@ export class UsersService {
   }
 
   async updateUserPassword(user: User, dto: Partial<User>) {
-    return await this.userRepository.save({
+    const updatedUser = await this.userRepository.save({
       ...user,
       ...dto,
     });
+
+    await this.activityLogService.createActivityLog({
+      userId: updatedUser.id,
+      activityCode: ActivityCode.PASSWORD_CHANGE,
+    });
+
+    return updatedUser;
   }
 
   async softDeleteUser(userId: number): Promise<void> {
@@ -100,6 +130,11 @@ export class UsersService {
 
     await this.userRepository.softRemove(existingUser);
     console.log(`SOFT deletion successful for user ID: ${userId}`);
+
+    await this.activityLogService.createActivityLog({
+      userId: existingUser.id,
+      activityCode: ActivityCode.ACCOUNT_DEACTIVATION,
+    });
   }
 
   async recoverUser(userId: number): Promise<User> {
@@ -135,11 +170,16 @@ export class UsersService {
       throw new NotFoundException(`Role ${dto.role} not found`);
     }
 
-    const d = await this.userRepository.save({
+    const updatedUser = await this.userRepository.save({
       ...existing,
       role: validRole,
     });
 
-    return d;
+    // await this.activityLogService.createActivityLog({
+    //   userId: updatedUser.id,
+    //   activityCode: ActivityCode.ROLE_UPDATE, // role update
+    // });
+
+    return updatedUser;
   }
 }

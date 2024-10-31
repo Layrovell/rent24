@@ -144,9 +144,9 @@ Check out a few resources that may come in handy when working with NestJS:
 4. Subscribtions system, that alow user to act as an agent.
 5. Email recover and change using email module. **(done)**
 6. Run over app security (~~xss~~, cookie, ~~cors policies~~). <br/> Helmet: security-related HTTP headers; <br/> sanitize-html: to check unsafe request body and queries; <br/> cors policies: to control headers and methods for security measures. <br/> **(in process)**
-7. Add moderation stage to property posting. Ex. the one can be posted but with some flag 'isModerated' and after property is moderated it will displayed with other as well. **(in process)**
+7. Add moderation stage to property posting. Ex. the one can be posted but with some flag 'isModerated' and after property is moderated it will displayed with other as well. **(done)**
 8. Tests set up and coverage.
-9. Add user sessions to be logged in in different devices and track it allowing to delete a muddy (suspicious) session.
+9. Add user sessions to be logged in in different devices and track it allowing to delete a muddy (suspicious) session.**(in process)**
 10. Move some of the endpoints to a separate place/whatever that will be used on separate admin panel.
     (such as create new wall/activity type or detail related to property, etc.).
 11. TBC
