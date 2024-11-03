@@ -9,3 +9,4 @@ export { PropertyDetails } from './property-details.entity';
 export { WallType } from './wall-types.entity';
 export { Amenities } from './amenities.entity';
 export { PropertyAmenities } from './property-amenities.entity';
+export { Session } from './session.entity';

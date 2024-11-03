@@ -16,6 +16,7 @@ import { UserProfile } from './profile.entity';
 import { Property } from './property.entity';
 import { Favorites } from './favorites.entity';
 import { AgentProfile } from './agent-profile.entity';
+import { Session } from './session.entity';
 
 export enum Role {
   GUEST = 'guest',
@@ -91,6 +92,9 @@ export class User {
 
   @OneToMany(() => Favorites, (fav) => fav.user, { onDelete: 'CASCADE' })
   favoriteProperties: Favorites[];
+
+  @OneToMany(() => Session, (session) => session.user, { cascade: true })
+  sessions: Session[]; // Add sessions relationship here
 }
 
 // @DeleteDateColumn is a special column that is automatically set

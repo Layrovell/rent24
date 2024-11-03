@@ -10,6 +10,7 @@ import { SecurityModule } from 'src/security/security.module';
 import { JwtStrategy } from 'src/strategies/jwtStrategy';
 import { ActivityLogModule } from 'src/resources/activity-log/activity-log.module';
 import { EmailModule } from 'src/resources/email/email.module';
+import { SessionModule } from 'src/resources/session/session.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EmailModule } from 'src/resources/email/email.module';
     }),
     ActivityLogModule,
     EmailModule,
+    SessionModule,
   ],
   // JWT strategy extracts and attaches the user to the req
   providers: [AuthService, JwtStrategy],

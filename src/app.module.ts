@@ -20,6 +20,7 @@ import { PropertyAmenitiesModule } from './resources/property-amenities/property
 import { AgentProfileModule } from './resources/agent-profile/agent-profile.module';
 import { EmailModule } from './resources/email/email.module';
 import { SanitizeMiddleware } from './middlewares/sanitize.middleware';
+import { SessionModule } from './resources/session/session.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { SanitizeMiddleware } from './middlewares/sanitize.middleware';
     PropertyAmenitiesModule,
     AgentProfileModule,
     EmailModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

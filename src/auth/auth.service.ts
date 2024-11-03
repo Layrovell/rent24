@@ -26,6 +26,7 @@ import { ActivityLogService } from 'src/resources/activity-log/activity-log.serv
 import { ActivityCode } from 'src/lib/activities';
 import { UpdateUserPasswordDto } from 'src/resources/users/dto/update-user-password.dto';
 import { EmailService } from 'src/resources/email/email.service';
+import { SessionService } from 'src/resources/session/session.service';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,8 @@ export class AuthService {
     @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
     private readonly userHelperProvider: UserHelperProvider,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly sessionService: SessionService
   ) {
     this.cache = new NodeCache({ stdTTL: this.CODE_EXPIRATION }); // Initialize cache with TTL (Time To Live)
   }
@@ -63,12 +65,20 @@ export class AuthService {
 
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: this.config.get<string>('SECRET_REFRESH_TOKEN'),
-      expiresIn: '15m',
+      expiresIn: '7d',
     });
 
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.config.get<string>('SECRET'),
       expiresIn: '2h',
+    });
+
+    // Store refreshToken in session
+    await this.sessionService.createSession({
+      refreshToken: refreshToken,
+      user: user,
+      deviceName: 'dddeviceName',
+      location: 'lllocation',
     });
 
     return { refreshToken, accessToken };
@@ -224,6 +234,26 @@ export class AuthService {
       dto.newEmail,
       verificationCode
     );
+  }
+
+  async refreshTokens(oldRefreshToken: string): Promise<LoginResponseDto> {
+    // Verify if the session with this refresh token exists and is still valid
+    const session = await this.sessionService.findByToken(oldRefreshToken);
+
+    const user = await this.userService.getUserById(session.user.id);
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.generateTokenPair(user);
+
+    await this.sessionService.updateSession({
+      sessionId: session.id,
+      newRefreshToken: newRefreshToken,
+      deviceName: 'dddeviceName',
+      location: 'lllocation',
+      online: true,
+    });
+
+    return { accessToken, refreshToken: newRefreshToken };
   }
 
   // Helper method for validation
